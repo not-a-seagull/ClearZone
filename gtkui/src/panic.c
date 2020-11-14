@@ -1,4 +1,4 @@
-/* gtkui/src/main.cpp
+/* gtkui/src/panic.c
  *
  * Clear Zone is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,14 +15,22 @@
  *
  */
 
-#include <memory>
+#include "panic.h"
 
-#include "ui.h"
-#include "world.h"
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int main(int argc, char **argv) {
-  GInterface *interface = ginterface_init(argc, argv);
-  ginterface_run(interface);
-  ginterface_drop(interface);
-  return 0;
+void panic(const char *msg) {
+  fprintf(stderr, "A fatal error has occured and ClearZone must shut down: %s\n",
+          msg);
+  fprintf(stderr, "System Error: %s\n", strerror(errno));
+  exit(1);
+}
+
+void assert(int cond, const char *msg) {
+  if (!cond) {
+    panic(msg);
+  }
 }
