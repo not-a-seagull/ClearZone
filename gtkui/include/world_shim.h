@@ -1,4 +1,4 @@
-/* gtkui/src/main.cpp
+/* gtkui/include/world_shim.h
  *
  * Clear Zone is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,14 +15,19 @@
  *
  */
 
-#include <memory>
+#ifndef WORLD_SHIM_H
+#define WORLD_SHIM_H
 
 #include "ui.h"
-#include "world.h"
 
-int main(int argc, char **argv) {
-  GInterface *interface = ginterface_init(argc, argv);
-  ginterface_run(interface);
-  ginterface_drop(interface);
-  return 0;
+#if __cplusplus
+extern "C" {
+#endif
+
+void initialize_world(GInterface *ginterface);
+
+#if __cplusplus
 }
+#endif
+
+#endif
