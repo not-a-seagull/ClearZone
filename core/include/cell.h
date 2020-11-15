@@ -8,14 +8,8 @@ using namespace std;
 
 class Cell {
  protected:
-  Biome cellBiome;
-  int index1 = 0, index2 = 0;
+  int8 biomeID;
 
  public:
-  Cell();
-  Cell(Biome, vector<Entity>)
-
-      int getBiome() const;
-  void setBiome(int biomeID);
-};
+  Cell(int8 biomeID);
 #endif
