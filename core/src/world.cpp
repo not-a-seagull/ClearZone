@@ -102,10 +102,10 @@ World::World(int width, int height, int octaves, int seed, float scale) {
   for (int i = 0; i < width; i++) {
     this->cells[i] = std::move(std::make_unique<Cell[]>(height));
     for (int j = 0; j < height; j++) {
-      float val = (float)noise.ValueNoise_2D((double) i / scale,(double) j / scale) / std::numeric_limits<float>::max();
-      std::cout << val;
+      float val = (float)noise.ValueNoise_2D((double) i / scale,(double) j / scale);
+      //std::cout << val << std::endl;
       //float val = (float)std::rand() / (float)RAND_MAX;
-      this->cells[i][j] = Cell((int) (val * BIOME_COUNT));
+      this->cells[i][j] = Cell((int) (val * 4 * BIOME_COUNT));
     }
   }
 
