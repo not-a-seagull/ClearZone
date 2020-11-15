@@ -2,7 +2,7 @@
 using namespace std;
 #ifndef ITEM_H
 #define ITEM_H
-class Item {
+struct Item {
     protected:
         int itemID;
     public:
