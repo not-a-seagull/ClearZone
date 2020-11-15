@@ -8,9 +8,14 @@ using namespace std;
 
 #include "item.h"
 
+enum Direction {
+  Up, Down, Left, Right
+} Direction;
+
 class Entity {
  protected:
   int entityType;
+  int subclass;
 
   int health;
   long sexAppeal;
@@ -18,9 +23,14 @@ class Entity {
   vector<Item> inventory;
 
  public:
-  Entity();
-  Entity(int, int, long, int, int);
+  int indexX;
+  int indexY;
 
+  Entity();
+  Entity(string s, int heal, int intel, int charis, int dex, int wisdom,
+               int constit, double str, long sex, int num);
+
+  int getSubclass() const { return this->subclass; }
   int getEntityType() const;
   void setEntityType(int);
 
@@ -31,5 +41,6 @@ class Entity {
   void setSexAppeal(long);
 
   void addItem(Item);
+  void moveEntity(Direction dir);
 };
 #endif

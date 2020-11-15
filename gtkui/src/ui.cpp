@@ -223,7 +223,6 @@ static void activate(GtkApplication *app, gpointer user_data) {
   GtkWidget *texttainer;
   GtkWidget *textbox;
   GtkWidget *drawbox;
-  GtkWidget *init_sign;
   GtkWidget *container_box;
   GInterface *interface = (GInterface *)user_data;
 
@@ -248,9 +247,6 @@ static void activate(GtkApplication *app, gpointer user_data) {
   // Create the textbox, a box containing text items.
   textbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
   gtk_container_add(GTK_CONTAINER(texttainer), textbox);
-
-  init_sign = gtk_label_new("Initializing ClearZone...");
-  gtk_box_pack_start(GTK_BOX(textbox), init_sign, FALSE, FALSE, 0);
 
   // Create the drawbox, corresponding to an image surface.
   drawbox = gtk_drawing_area_new();
