@@ -190,6 +190,7 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img, int px, int py) {
           r = 0.0f;
           g = 0.2f;
           b = 0.6f;
+          break;
         default:
           r = 0.0f;
           g = 0.0f;
