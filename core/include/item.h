@@ -23,13 +23,10 @@ using namespace std;
 class Item {
   protected:
     int[10] itemIDs;
-    //int weight;
   public:
-    Item();
-    Item(int);
+    Item(int[10]); //items
 
-    int getItemID() const;
-    void setItemID(int);
+    int getItemID(int) const;
 };
 #endif
 
@@ -131,19 +128,23 @@ class Weapon : public Item {
 };
 
 Weapon::Weapon() {
-  this->meleeType = "fists";
-  this->bowType = "none";
+  this->itemIDs[0] = 1;
+  this->itemIDs[1] = 0;
 }
 
 Weapon::Weapon(int meleeType, int bowType) {
-  this->meleeType = meleeType;
+  this->itemIDs[0] = meleeType;
   this->damageModifyerM = meleeType + 1;
-  this->bowType = bowType;
+  this->itemIDs[1] = bowType;
   this->damageR = bowType * 15;
+
 }
 
 int Weapon::getArrows() const { return this->arrows; }
 int Weapon::getBullets() const { return this->bullets; }
 
-string Weapon::getRanged() const { return this->bowType; }
+string Weapon::getRanged() const {
+  if (this->itemIDs[]
+  return this->bowType; 
+}
 string Weapon::getMelee() const { return this->meleeType; }

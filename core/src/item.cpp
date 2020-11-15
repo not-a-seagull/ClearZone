@@ -2,10 +2,12 @@
 using namespace std;
 #include "item.h"
 
-Item::Item() { this->itemID = 0; }
+Item::Item(int[10] items) {
+    for (int i = 0; i < 10; i++) {
+        this->itemIDs[i] = items[i];
+    }
+}
 
-Item::Item(int i) { this->itemID = i; }
+int Item::getItemID(int index) const { return this->itemIDs[index]; }
 
-int Item::getItemID() const { return this->itemID; }
-void Item::setItemID(int i) { this->itemID = i; }
 
