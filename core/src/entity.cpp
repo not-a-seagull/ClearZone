@@ -3,9 +3,7 @@
 using namespace std;
 
 Entity::Entity() {
-    this->entityType = "Blank";
-    this->health = this->intelligence = this->charisma = this->dexterity = this->wisdom = this->constitution = 0;
-    this->strength = 0;
+    this->entityType = 0;
     this->sexAppeal = 0; //(me)
     this->numEntities = 1;
 }

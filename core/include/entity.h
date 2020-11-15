@@ -9,10 +9,8 @@ using namespace std;
 class Entity {
     protected:
         int entityType;
-        
         int health;
         long sexAppeal;
-        
         vector<Item> inventory;
     public:
         Entity();
