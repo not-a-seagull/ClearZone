@@ -43,13 +43,21 @@ std::shared_ptr<std::string[]> get_directionals() {
 
   return directionals;
 }
-void doCombat(Entity& player, Entity& enemy) {
+void doCombat(Humanoid& player, Entity& enemy) {
   bool playerTurn = true;
   int playerDamageMultiplyer = 1;
   int playerWeaponChoiceID = 1;
   while (player.getHealth() > 0 && enemy.getHealth() > 0) {
     //display weapon dialougue this->weaponDialougue to user
-    
+    switch(playerWeapongChoiceID) {
+      case 1: playerDamageMultiplyer = 1;
+      case 2: playerDamageMultiplyer = 2;
+      case 3: playerDamageMultiplyer = 3;
+      case 4: playerDamageMultiplyer = 4;
+      case 5: playerDamageMultiplyer = 1;
+      case 6: playerDamageMultiplyer = 3;
+      case 7: playerDamageMultiplyer = 5;
+    }
     playerDamageMultiplyer;
     if (player.getSpeed() >= enemy.getSpeed()) {
       
@@ -60,9 +68,10 @@ void doCombat(Entity& player, Entity& enemy) {
       }
     } else if (player.getSpeed() < enemy.getSpeed()) {
       if (!playerTurn) {
-        player.setHealth(player.getHealth() - enemy.getDamage());
+        player.setHealth(player.getHealth() - 1);
         playerTurn = true;
       } else if (playerTurn) {
+        enemy.setHealth(enemy.getHealth() - (player.getStrength))
         playerTurn = false;
       }
     }

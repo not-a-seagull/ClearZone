@@ -10,6 +10,7 @@
 #include "choice.h"
 #include "happenings.h"
 #include "player.h"
+#include "humanoid.h"
 //#include "PerlinNoise.hpp"
 
 using namespace std;
