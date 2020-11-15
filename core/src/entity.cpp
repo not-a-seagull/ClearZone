@@ -4,7 +4,6 @@ using namespace std;
 Entity::Entity() {
     this->entityType = 0;
     this->sexAppeal = 0; //(me)
-    this->numEntities = 1;
 }
 
 
@@ -16,7 +15,7 @@ Entity::Entity(int s, int heal, long sex, int inx, int iny) {
   this->indexY = iny;
 }
 
-int Entity::getEntityType() { return this->entityType; }
+int Entity::getEntityType() const { return this->entityType; }
 void Entity::setEntityType(int s) { this->entityType = s; }
 
 int Entity::getHealth() const { return this->health; }

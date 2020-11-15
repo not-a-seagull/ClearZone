@@ -40,7 +40,7 @@ std::shared_ptr<std::string[]> get_directionals() {
 }
 
 // I'm very tired
-World::World() {
+World::World() { 
   for (int i = 0; i < 16; i++) {
     for (int j = 0; j < 16; j++) {
       //            Cells[i][j] = Cell;
@@ -62,10 +62,20 @@ void World::generate_events() {
   std::shared_ptr<char[]> tiles = std::shared_ptr<char[]>(new char[32 * 32]);
   memset(tiles.get(), 'B', 32 * 32);
 
-  std::unique_ptr<Event> mde = std::unique_ptr<Event>(new MapDpyEvent(tiles));
+  Player *ply = this->get_player();
+  int x = ply->indexX;
+  int y = ply->indexY;
+
+  std::unique_ptr<Event> mde = std::unique_ptr<Event>(new MapDpyEvent(tiles, x, y));
   std::unique_ptr<Event> ce = std::unique_ptr<Event>(
-      new ChoiceEvent(get_directionals(), 5, [](ptrdiff_t choice) {
-        // TODO
+      new ChoiceEvent(get_directionals(), 5, [this](ptrdiff_t choice) {
+        Player *ply = this->get_player();
+        switch (choice) {
+          case 0: ply->moveEntity(UP); break;
+          case 1: ply->moveEntity(LEFT); break;
+          case 2: ply->moveEntity(RIGHT); break;
+          case 3: ply->moveEntity(DOWN); break;
+        } 
       }));
   std::unique_ptr<Event> te =
       std::unique_ptr<Event>(new TextEvent("Choose where to go"));
@@ -73,4 +83,42 @@ void World::generate_events() {
   this->event_queue.push(std::move(mde));
   this->event_queue.push(std::move(te));
   this->event_queue.push(std::move(ce));
+}
+
+Player *World::get_player() {
+  for (ptrdiff_t i = 0; i < this->entities.size(); i++) {
+    if (this->entities[i]->getSubclass() == PLAYER_SUBCLASS) {
+      return static_cast<Player *>(this->entities[i].get());
+    }
+  }
+  return nullptr;
+}
+
+std::shared_ptr<char[]> World::compile_map() {
+  Player *ply = this->get_player();
+  int left = ply->indexX - 16;
+  int top = ply->indexY - 16;
+  if (left < 0) left = 0;
+  if (top < 0) top = 0;
+
+  int right = left + 32;
+  int bottom = top + 32;
+  
+  if (right > this->width) {
+    right = this->width;
+    left = right - 32;
+  }
+  if (bottom > this->height) {
+    bottom = this->height;
+    top = bottom - 32;
+  }
+
+  std_shared<char[]> res = std::make_shared<char[]>(32*32);
+  for (int i = left; i < right; i++) {
+    for (int j = top; j < bottom; j++) {
+      res[(j * 32) + i] = Biome::GetBiome(this->Cells[j][i]);
+    }
+  }
+
+  return res;
 }

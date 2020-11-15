@@ -22,11 +22,10 @@
 
 #define PLAYER_SUBCLASS 23
 
-class Player : Entity {
+class Player : public Entity {
  public:
   Player();
-  Player(string s, int heal, int intel, int charis, int dex, int wisdom,
-         int constit, double str, long sex, int num);
+  Player(int, int, long, int, int);
 };
 
 #endif

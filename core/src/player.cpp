@@ -19,8 +19,7 @@
 
 Player::Player() { this->subclass = PLAYER_SUBCLASS; }
 
-Player::Player(string s, int heal, int intel, int charis, int dex, int wisdom,
-               int constit, double str, long sex, int num)
-    : Entity(s, heal, intel, charis, dex, wisdom, constit, str, sex, num) {
+Player::Player(int a, int b, long c, int d, int e) 
+    : Entity(a, b, c, d, e) {
   this->subclass = PLAYER_SUBCLASS;
 }

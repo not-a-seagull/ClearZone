@@ -18,7 +18,7 @@ class Entity {
         int entityType;
         int health;
         long sexAppeal;
-        int indexX, indexY;
+        vector<Item> inventory;
     public:
 
         Entity();
@@ -35,7 +35,10 @@ class Entity {
   long getSexAppeal() const;
   void setSexAppeal(long);
 
-  void addItem(Item);
+  int getHealth() const;
+  void setHealth(int h);
+
+  void addItem(const Item&);
   void moveEntity(int dir);
 };
 #endif

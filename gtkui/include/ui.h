@@ -104,7 +104,7 @@ class GInterface {
   void animation_overlay(const Animation *anim);
 
   //! Display a map on the GInterface.
-  void dpy_map(std::shared_ptr<char[]> img);
+  void dpy_map(std::shared_ptr<char[]> img, int px, int py);
 };
 
 #endif  // CZG_UI_H

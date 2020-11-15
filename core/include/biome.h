@@ -7,14 +7,14 @@ using namespace std;
 
 class Biome {
  protected:
-  std::vector<char> biomes = {'%', '\'', '\"', '{'};
+  static std::vector<char> biomes = {'%', '\'', '\"', '{'};
 
  public:
-  void addBiome(char biomeColor);
+  static void addBiome(char biomeColor);
 
-  char getBiome(int biomeID);
-  void setBiome(int biomeID, char biomeColor);
+  static char getBiome(int biomeID);
+  static void setBiome(int biomeID, char biomeColor);
 
-  int getLength();
+  static int getLength();
 };
 #endif

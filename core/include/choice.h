@@ -92,10 +92,13 @@ class QuitEvent : public Event {
 class MapDpyEvent : public Event {
  private:
   std::shared_ptr<char[]> data;
-
+  int playerX;
+  int playerY;
  public:
-  MapDpyEvent(std::shared_ptr<char[]> dat) : data(dat) {}
+  MapDpyEvent(std::shared_ptr<char[]> dat, int x, int y) : data(dat), playerX(x), playerY(y) {}
   const std::shared_ptr<char[]> get_data() const { return this->data; }
+  int get_x() const { return playerX; }
+  int get_y() const { return playerY; }
   int get_type() const { return MAPDPY_EVENT_TYPE; }
 };
 

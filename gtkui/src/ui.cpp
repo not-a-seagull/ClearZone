@@ -132,7 +132,7 @@ void GInterface::dpy_choice(std::shared_ptr<std::string[]> choices,
 
 void GInterface::stop() { gtk_main_quit(); }
 
-void GInterface::dpy_map(std::shared_ptr<char[]> img) {
+void GInterface::dpy_map(std::shared_ptr<char[]> img, int px, int py) {
   printf("Updating map...\n");
   // map should be 32x32
   float r, g, b;
@@ -168,6 +168,13 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img) {
       cairo_fill(cr);
     }
   }
+
+  cairo_set_line_width(cr, 0.6);
+  cairo_set_source_rgb(cr, 0.4, 0.4, 0.4);
+  cairo_move_to(cr, cell_width * px, cell_height * py);
+  cairo_line_to(cr, cell_width * (px + 1), cell_height * (py + 1));
+  cairo_move_to(cr, cell_width * px, cell_height * (py + 1));
+  cairo_line_to(cr, cell_width * (px + 1), cell_height * py);
 
   if (cairo_status(cr) != CAIRO_STATUS_SUCCESS) {
     panic("Cairo failed!");
@@ -210,7 +217,7 @@ void GInterface::world_tick() {
     this->dpy_choice(choice->get_choices(), choice->get_num_choices(), std::move(choice->get_responder()));
   } else if (ty == MAPDPY_EVENT_TYPE) {
     MapDpyEvent *mde = dynamic_cast<MapDpyEvent *>(ev.get());
-    this->dpy_map(mde->get_data());
+    this->dpy_map(mde->get_data(), mde->get_x(), mde->get_y());
     this->world_tick();
   } else {
     this->stop();
