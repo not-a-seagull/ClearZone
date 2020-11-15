@@ -23,22 +23,22 @@
 #include <cstdlib>
 #include <memory>
 
+extern "C" void _respond_to_choice(ptrdiff_t choice, GInterface *interface, void *user_data) {
+    if (choice == 0) {
+        World *world = new World();
+        ginterface_set_world(interface, (void *) world);
+    } else {
+        panic("Cannot yet laoad file");
+    }
+}
+
 extern "C" void initialize_world(GInterface *interface) {
-    const char **CHOICES = {
+    const char *CHOICES[] = {
       "Create new world",
       "Load from File",
     };
  
     // ask for a name
     ginterface_dpy_text(interface, "Load a world from save, or being a new one?");
-    ginterface_dpy_choice(interface, CHOICES, 2, _respond_to_choice);
-}
-
-extern "C" void _respond_to_choice(ptrdiff_t choice, GInterface *interface, void *user_data) {
-    if (choice == 0) {
-        World *world = new World();
-        ginterface_set_world((void *) world);
-    } else {
-        panic("Cannot yet laoad file")
-    }
+    ginterface_dpy_choice(interface, CHOICES, 2, _respond_to_choice, NULL);
 }
