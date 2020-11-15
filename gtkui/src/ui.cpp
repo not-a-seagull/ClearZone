@@ -40,7 +40,7 @@ void choice_select(GtkWidget *widget, gpointer user_data);
 void process_yesno_res(GInterface *interface, bool yesno);
 void print_inventory(GtkWidget *widget, gpointer user_data);
 
-const int SURFACE_WIDTH = 450;
+const int SURFACE_WIDTH = 650;
 const int SURFACE_HEIGHT = 900;
 
 const int MAP_WIDTH = 200, MAP_HEIGHT = 200, OCTAVES = 5; 
@@ -57,13 +57,13 @@ GInterface::GInterface(int argc, char **argv) {
   this->argc = argc;
   this->argv = argv;
   this->current_drawbox =
-      cairo_image_surface_create(CAIRO_FORMAT_RGB24, 450, 900);
+      cairo_image_surface_create(CAIRO_FORMAT_RGB24, SURFACE_WIDTH, SURFACE_HEIGHT);
   this->world = NULL;
 
   // Fill the surface with white pixels for now.
   cairo_surface_flush(this->current_drawbox);
   memset(cairo_image_surface_get_data(this->current_drawbox), 255,
-         450 * 900 * 4);
+         SURFACE_WIDTH * SURFACE_HEIGHT * 4);
   cairo_surface_mark_dirty(this->current_drawbox);
 
   // Create the Application.
@@ -278,7 +278,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
   // Create the parent window
   parent = gtk_application_window_new(app);
   gtk_window_set_title(GTK_WINDOW(parent), "Clear Zone");
-  gtk_window_set_default_size(GTK_WINDOW(parent), 1000, 950);
+  gtk_window_set_default_size(GTK_WINDOW(parent), 1200, 950);
   gtk_window_set_position(GTK_WINDOW(parent), GTK_WIN_POS_CENTER);
   gtk_window_set_resizable(GTK_WINDOW(parent), FALSE);
 
