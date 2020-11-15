@@ -73,6 +73,8 @@ int GInterface::run() {
   return g_application_run(G_APPLICATION(this->app), this->argc, this->argv);
 }
 
+GInterface::~GInterface() {}
+
 void GInterface::dpy_text(const char *line) {
   GtkWidget *label;
   label = gtk_label_new(line);
@@ -108,19 +110,22 @@ void GInterface::dpy_choice(std::shared_ptr<std::string[]> choices,
   this->choice_responder = std::optional(reply);
 
   printf("Choice:\n");
-  ChoiceResult *cres;
   GtkWidget *cbutton;
+  GtkWidget *choicebox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 15);
+
+  this->choices = std::make_unique<std::unique_ptr<ChoiceResult>[]>(num_choices);
 
   for (ptrdiff_t i = 0; i < num_choices; i++) {
     printf(" - %s\n", choices[i].c_str());
     cbutton = gtk_button_new_with_label(choices[i].c_str());
-    cres = new ChoiceResult(this, i);
-    g_signal_connect(cbutton, "clicked", G_CALLBACK(choice_select), cres);
+    std::unique_ptr<ChoiceResult> cres = std::unique_ptr<ChoiceResult>(new ChoiceResult(this, i));
+    g_signal_connect(cbutton, "clicked", G_CALLBACK(choice_select), cres.get());
     gtk_box_pack_start(GTK_BOX(choicebox), cbutton, FALSE, FALSE, 0);
-    this->choices.push_back(cres);
+    this->choices[i] = std::move(cres);
   }
+  this->num_choices = num_choices;
 
-  gtk_box_pack_start(GTK_BOX(v->textbox), choicebox, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(this->textbox), choicebox, FALSE, FALSE, 0);
   gtk_widget_show_all(choicebox);
   this->choicebox = choicebox;
 }
@@ -128,8 +133,7 @@ void GInterface::dpy_choice(std::shared_ptr<std::string[]> choices,
 void GInterface::stop() { gtk_main_quit(); }
 
 void GInterface::dpy_map(std::shared_ptr<char[]> img) {
-  return;
-
+  printf("Updating map...\n");
   // map should be 32x32
   float r, g, b;
   cairo_t *cr = cairo_create(this->current_drawbox);
@@ -142,7 +146,7 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img) {
   for (int i = 0; i < CELLS_X; i++) {
     for (int j = 0; j < CELLS_Y; j++) {
       // figure out source
-      char current = (j * CELLS_Y) + i;
+      char current = img[(j * CELLS_Y) + i];
       switch (current) {
         case 'F':
           r = 0.0f;
@@ -153,6 +157,7 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img) {
           r = 0.0f;
           g = 0.0f;
           b = 0.0f;
+          break;
       }
 
       cairo_set_source_rgb(cr, r, g, b);
@@ -164,17 +169,31 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img) {
     }
   }
 
+  if (cairo_status(cr) != CAIRO_STATUS_SUCCESS) {
+    panic("Cairo failed!");
+  }
+
   cairo_surface_flush(this->current_drawbox);
   cairo_destroy(cr);
+  gtk_widget_queue_draw(this->drawbox);
 }
 
 void GInterface::initialize_world() {
-  this->world = std::unique_ptr<World>(new World());
+  std::shared_ptr<std::string[]> init_choices = std::shared_ptr<std::string[]>(new std::string[2]);
+  init_choices[0] = "Create New World";
+  init_choices[1] = "Load from File"; 
 
-  this->world_tick();
+  this->dpy_choice(init_choices, 2, [this](ptrdiff_t load) {
+    if (load == 0) {
+      this->world = std::unique_ptr<World>(new World());
+    } else {
+      panic("Unable to load world from file yet");
+    }
+  });
 }
 
 void GInterface::world_tick() {
+  printf("Running world tick...\n");
   std::unique_ptr<Event> ev = this->world->next_event();
 
   int ty = ev->get_type();
@@ -183,15 +202,19 @@ void GInterface::world_tick() {
     this->dpy_text(tev->get_text().c_str());
     this->world_tick();
   } else if (ty == YESNO_EVENT_TYPE) {
-    YesNoEvent *yesno = dynamic_cast<TextEvent *>(ev.get());
+    YesNoEvent *yesno = dynamic_cast<YesNoEvent *>(ev.get());
     this->dpy_yesno(yesno->get_prompt().c_str(),
                     std::move(yesno->get_responder()));
   } else if (ty == CHOICE_EVENT_TYPE) {
-    ChoiceEvent *choice = dynamic_cast<TextEvent *>(ev.get());
-    this->dpy_choice(choice->get_choices(), std::move(choice->get_responder()));
+    ChoiceEvent *choice = dynamic_cast<ChoiceEvent *>(ev.get());
+    this->dpy_choice(choice->get_choices(), choice->get_num_choices(), std::move(choice->get_responder()));
   } else if (ty == MAPDPY_EVENT_TYPE) {
     MapDpyEvent *mde = dynamic_cast<MapDpyEvent *>(ev.get());
     this->dpy_map(mde->get_data());
+    this->world_tick();
+  } else {
+    this->stop();
+    exit(0);
   }
 }
 
@@ -200,7 +223,6 @@ static void activate(GtkApplication *app, gpointer user_data) {
   GtkWidget *texttainer;
   GtkWidget *textbox;
   GtkWidget *drawbox;
-  GtkWidget *init_sign;
   GtkWidget *container_box;
   GInterface *interface = (GInterface *)user_data;
 
@@ -226,9 +248,6 @@ static void activate(GtkApplication *app, gpointer user_data) {
   textbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
   gtk_container_add(GTK_CONTAINER(texttainer), textbox);
 
-  init_sign = gtk_label_new("Initializing ClearZone...");
-  gtk_box_pack_start(GTK_BOX(textbox), init_sign, FALSE, FALSE, 0);
-
   // Create the drawbox, corresponding to an image surface.
   drawbox = gtk_drawing_area_new();
   g_signal_connect(G_OBJECT(drawbox), "draw", G_CALLBACK(drawing_area_draw),
@@ -240,7 +259,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
   interface->drawbox = drawbox;
 
   gtk_widget_show_all(parent);
-  ginterface_dpy_text(interface, "Welcome to ClearZone!\n");
+  interface->dpy_text("Welcome to ClearZone!\n");
 
   interface->initialize_world();
 }
@@ -266,7 +285,7 @@ void process_yesno_res(GInterface *interface, bool yesno) {
   gtk_widget_hide(interface->choicebox);
 
   // selector
-  std::function<void(bool)> rep = std::move(this->yesno_responder).value();
+  std::function<void(bool)> rep = std::move(interface->yesno_responder).value();
   rep(yesno);
 
   interface->world_tick();
@@ -277,19 +296,12 @@ void choice_select(GtkWidget *widget, gpointer user_data) {
   GInterface *interface = cr->v;
   ptrdiff_t choice = cr->choice;
 
-  // delete the choices
-  int sz = interface->choices.size();
-  for (ptrdiff_t i = 0; i < sz; i++) {
-    ChoiceResult *c = interface->choices.pop_back();
-    free(c);
-  }
-
   // hide the box
   gtk_widget_hide(interface->choicebox);
 
   // selector
   std::function<void(ptrdiff_t)> rep =
-      std::move(this->choice_responder).value();
+      std::move(interface->choice_responder).value();
   rep(choice);
 
   interface->world_tick();

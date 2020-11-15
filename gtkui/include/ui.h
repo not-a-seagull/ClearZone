@@ -64,7 +64,8 @@ class GInterface {
   ptrdiff_t anim_frame;
 
   //! Allocated choice objects.
-  std::vector<ChoiceResult *> choices;
+  std::unique_ptr<std::unique_ptr<ChoiceResult>[]> choices;
+  ptrdiff_t num_choices;
 
   //! Pointer to the world object.
   std::unique_ptr<World> world;

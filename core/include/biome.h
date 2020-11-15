@@ -7,7 +7,7 @@ using namespace std;
 
 class Biome {
  protected:
-  std::vector(char) biomes = {'%', '\'', '\"', '{'};
+  std::vector<char> biomes = {'%', '\'', '\"', '{'};
 
  public:
   void addBiome(char biomeColor);

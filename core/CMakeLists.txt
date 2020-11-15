@@ -23,6 +23,8 @@ INCLUDE_DIRECTORIES("${CZC_INCLUDE}")
 
 # Set new source files here, boys - j.n.
 SET(CZC_SOURCES
+  ${CZC_SRC}/item.cpp
+  ${CZC_SRC}/player.cpp
   ${CZC_SRC}/world.cpp
 )
 
