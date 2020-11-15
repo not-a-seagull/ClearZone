@@ -27,7 +27,7 @@
 #include "humanoid.h"
 
 static char BIOME_TABLE[] = {
-   'F', 'D', 'P', 'J', 'A', 'W'
+   'W', 'D', 'P', 'J', 'A', 'F'
 };
 static int BIOME_COUNT = 6;
 
@@ -110,24 +110,42 @@ World::World(int width, int height, int octaves, int seed, float scale) {
       this->cells[i][j] = Cell((uint8_t)(val * 40) % BIOME_COUNT);
     }
   }
+  
+  for(int e = 0; e < 1; e++) {
+    // This loop iterates over the map and determines river tiles.
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        float riverProbability = 0.005f; // Probability that a river / stream tile will on this cell;
+        for(int x = -1; x < 1; x++) {
+          for(int y = -1; y < 1; y++) {
+            if(this->cells[max(i + x, 0)][max(j + y, 0)].GetBiome() == 0) {
+                riverProbability += 0.2f;
+            }
+          }
+        }
+        if((float)std::rand() / RAND_MAX < riverProbability) {
+          this->cells[i][j] = Cell(0);
+        }
+      }
+    }
 
-  // This loop iterates over the map and determines river tiles.
-  // for (int i = 0; i < width; i++) {
-  //   this->cells[i] = std::move(std::make_unique<Cell[]>(height));
-  //   for (int j = 0; j < height; j++) {
-  //     float riverProbability = 0.05f; // Probability that a river / stream tile will on this cell;
-  //     for(int x = -1; x < 1; x++) {
-  //       for(int y = -1; y < 1; y++) {
-  //         if(this->cells[max(i + x, 0)][max(j + y, 0)].GetBiome() == 5) {
-  //             riverProbability += 0.1f;
-  //         }
-  //       }
-  //     }
-  //     if((float)std::rand() / RAND_MAX < riverProbability) {
-  //       this->cells[i][j] = Cell(5);
-  //     }
-  //   }
-  // }
+      for (int i = width - 1; i > 0; i--) {
+      for (int j = height - 1; j > 0; j--) {
+        float riverProbability = 0.005f; // Probability that a river / stream tile will on this cell;
+        for(int x = -1; x < 1; x++) {
+          for(int y = -1; y < 1; y++) {
+            if(this->cells[min(max(i + x, 0), width)][min(max(j + y, 0), height)].GetBiome() == 0) {
+                riverProbability += 0.2f;
+            }
+          }
+        }
+
+        if((float)std::rand() / RAND_MAX < riverProbability) {
+        this->cells[i][j] = Cell(0);
+        }
+      }
+    }
+  }
 
 }
 
