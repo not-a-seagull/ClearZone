@@ -24,6 +24,7 @@
 
 #include "choice.h"
 #include "PerlinNoise.hpp"
+#include "humanoid.h"
 
 static char BIOME_TABLE[] = {
    'F', 'D', 'P', 'J', 'A', 'W'
@@ -100,7 +101,7 @@ World::World(int width, int height, int octaves, int seed, float scale) {
   for (int i = 0; i < width; i++) {
     this->cells[i] = std::move(std::make_unique<Cell[]>(height));
     for (int j = 0; j < height; j++) {
-      float val = perlin.accumulatedOctaveNoise2D_0_1(i / scale, j / scale, octaves);
+      float val = (float)ValueNoise2D_2D((double) i / scale,(double) j / scale);
       //float val = (float)std::rand() / (float)RAND_MAX;
       this->cells[i][j] = Cell((int) (val * BIOME_COUNT));
     }

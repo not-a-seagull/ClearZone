@@ -39,9 +39,6 @@ class Entity {
   int getHealth() const;
   void setHealth(int h);
 
-  int getSpeed() const;
-  void setSpeed(int);
-
   void addItem(const Item&);
   void moveEntity(int dir);
 

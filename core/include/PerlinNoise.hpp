@@ -1,407 +1,79 @@
-//----------------------------------------------------------------------------------------
-//
-//	siv::PerlinNoise
-//	Perlin noise library for modern C++
-//
-//	Copyright (C) 2013-2020 Ryo Suzuki <reputeless@gmail.com>
-//
-//	Permission is hereby granted, free of charge, to any person obtaining a copy
-//	of this software and associated documentation files(the "Software"), to deal
-//	in the Software without restriction, including without limitation the rights
-//	to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
-//	copies of the Software, and to permit persons to whom the Software is
-//	furnished to do so, subject to the following conditions :
-//	
-//	The above copyright notice and this permission notice shall be included in
-//	all copies or substantial portions of the Software.
-//	
-//	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
-//	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//	THE SOFTWARE.
-//
-//----------------------------------------------------------------------------------------
+// Two-dimensional value noise based on Hugo Elias's description:
+//   http://freespace.virgin.net/hugo.elias/models/m_perlin.htm
 
-# pragma once
-# include <cstdint>
-# include <algorithm>
-# include <array>
-# ifdef __cpp_concepts
-# if __has_include(<concepts>)
-# include <concepts>
-# endif
-# endif
-# include <iterator>
-# include <numeric>
-# include <random>
-# include <type_traits>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+using namespace std;
 
-namespace siv
-{
-# ifdef __cpp_lib_concepts
-	template <std::floating_point Float>
-# else
-	template <class Float>
-# endif
-	class BasicPerlinNoise
-	{
-	public:
+int numX = 512,
+    numY = 512,
+    numOctaves = 7;
+double persistence = 0.5;
 
-		using value_type = Float;
+#define maxPrimeIndex 10
+int primeIndex = 0;
 
-	private:
+int primes[maxPrimeIndex][3] = {
+  { 995615039, 600173719, 701464987 },
+  { 831731269, 162318869, 136250887 },
+  { 174329291, 946737083, 245679977 },
+  { 362489573, 795918041, 350777237 },
+  { 457025711, 880830799, 909678923 },
+  { 787070341, 177340217, 593320781 },
+  { 405493717, 291031019, 391950901 },
+  { 458904767, 676625681, 424452397 },
+  { 531736441, 939683957, 810651871 },
+  { 997169939, 842027887, 423882827 }
+};
 
-		std::uint8_t p[512];
+double Noise(int i, int x, int y) {
+  int n = x + y * 57;
+  n = (n << 13) ^ n;
+  int a = primes[i][0], b = primes[i][1], c = primes[i][2];
+  int t = (n * (n * n * a + b) + c) & 0x7fffffff;
+  return 1.0 - (double)(t)/1073741824.0;
+}
 
-		[[nodiscard]]
-		static constexpr value_type Fade(value_type t) noexcept
-		{
-			return t * t * t * (t * (t * 6 - 15) + 10);
-		}
+double SmoothedNoise(int i, int x, int y) {
+  double corners = (Noise(i, x-1, y-1) + Noise(i, x+1, y-1) +
+                    Noise(i, x-1, y+1) + Noise(i, x+1, y+1)) / 16,
+         sides = (Noise(i, x-1, y) + Noise(i, x+1, y) + Noise(i, x, y-1) +
+                  Noise(i, x, y+1)) / 8,
+         center = Noise(i, x, y) / 4;
+  return corners + sides + center;
+}
 
-		[[nodiscard]]
-		static constexpr value_type Lerp(value_type t, value_type a, value_type b) noexcept
-		{
-			return a + t * (b - a);
-		}
+double Interpolate(double a, double b, double x) {  // cosine interpolation
+  double ft = x * 3.1415927,
+         f = (1 - cos(ft)) * 0.5;
+  return  a*(1-f) + b*f;
+}
 
-		[[nodiscard]]
-		static constexpr value_type Grad(std::uint8_t hash, value_type x, value_type y, value_type z) noexcept
-		{
-			const std::uint8_t h = hash & 15;
-			const value_type u = h < 8 ? x : y;
-			const value_type v = h < 4 ? y : h == 12 || h == 14 ? x : z;
-			return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
-		}
+double InterpolatedNoise(int i, double x, double y) {
+  int integer_X = x;
+  double fractional_X = x - integer_X;
+  int integer_Y = y;
+  double fractional_Y = y - integer_Y;
 
-		[[nodiscard]]
-		static constexpr value_type Weight(std::int32_t octaves) noexcept
-		{
-			value_type amp = 1;
-			value_type value = 0;
+  double v1 = SmoothedNoise(i, integer_X, integer_Y),
+         v2 = SmoothedNoise(i, integer_X + 1, integer_Y),
+         v3 = SmoothedNoise(i, integer_X, integer_Y + 1),
+         v4 = SmoothedNoise(i, integer_X + 1, integer_Y + 1),
+         i1 = Interpolate(v1, v2, fractional_X),
+         i2 = Interpolate(v3, v4, fractional_X);
+  return Interpolate(i1, i2, fractional_Y);
+}
 
-			for (std::int32_t i = 0; i < octaves; ++i)
-			{
-				value += amp;
-				amp /= 2;
-			}
-
-			return value;
-		}
-
-	public:
-
-	# if __has_cpp_attribute(nodiscard) >= 201907L
-		[[nodiscard]]
-	# endif
-		explicit BasicPerlinNoise(std::uint32_t seed = std::default_random_engine::default_seed)
-		{
-			reseed(seed);
-		}
-
-	# ifdef __cpp_lib_concepts
-		template <std::uniform_random_bit_generator URNG>
-	# else
-		template <class URNG, std::enable_if_t<!std::is_arithmetic_v<URNG>>* = nullptr>
-	# endif
-	# if __has_cpp_attribute(nodiscard) >= 201907L
-		[[nodiscard]]
-	# endif
-		explicit BasicPerlinNoise(URNG&& urng)
-		{
-			reseed(std::forward<URNG>(urng));
-		}
-
-		void reseed(std::uint32_t seed)
-		{
-			for (size_t i = 0; i < 256; ++i)
-			{
-				p[i] = static_cast<std::uint8_t>(i);
-			}
-
-			std::shuffle(std::begin(p), std::begin(p) + 256, std::default_random_engine(seed));
-
-			for (size_t i = 0; i < 256; ++i)
-			{
-				p[256 + i] = p[i];
-			}
-		}
-
-	# ifdef __cpp_lib_concepts
-		template <std::uniform_random_bit_generator URNG>
-	# else
-		template <class URNG, std::enable_if_t<!std::is_arithmetic_v<URNG>>* = nullptr>
-	# endif
-		void reseed(URNG&& urng)
-		{
-			for (size_t i = 0; i < 256; ++i)
-			{
-				p[i] = static_cast<std::uint8_t>(i);
-			}
-
-			std::shuffle(std::begin(p), std::begin(p) + 256, std::forward<URNG>(urng));
-
-			for (size_t i = 0; i < 256; ++i)
-			{
-				p[256 + i] = p[i];
-			}
-		}
-
-		///////////////////////////////////////
-		//
-		//	Noise [-1, 1]
-		//
-		[[nodiscard]]
-		value_type noise1D(value_type x) const noexcept
-		{
-			return noise3D(x, 0, 0);
-		}
-
-		[[nodiscard]]
-		value_type noise2D(value_type x, value_type y) const noexcept
-		{
-			return noise3D(x, y, 0);
-		}
-
-		[[nodiscard]]
-		value_type noise3D(value_type x, value_type y, value_type z) const noexcept
-		{
-			const std::int32_t X = static_cast<std::int32_t>(std::floor(x)) & 255;
-			const std::int32_t Y = static_cast<std::int32_t>(std::floor(y)) & 255;
-			const std::int32_t Z = static_cast<std::int32_t>(std::floor(z)) & 255;
-
-			x -= std::floor(x);
-			y -= std::floor(y);
-			z -= std::floor(z);
-
-			const value_type u = Fade(x);
-			const value_type v = Fade(y);
-			const value_type w = Fade(z);
-
-			const std::int32_t A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z;
-			const std::int32_t B = p[X + 1] + Y, BA = p[B] + Z, BB = p[B + 1] + Z;
-
-			return Lerp(w, Lerp(v, Lerp(u, Grad(p[AA], x, y, z),
-				Grad(p[BA], x - 1, y, z)),
-				Lerp(u, Grad(p[AB], x, y - 1, z),
-				Grad(p[BB], x - 1, y - 1, z))),
-				Lerp(v, Lerp(u, Grad(p[AA + 1], x, y, z - 1),
-				Grad(p[BA + 1], x - 1, y, z - 1)),
-				Lerp(u, Grad(p[AB + 1], x, y - 1, z - 1),
-				Grad(p[BB + 1], x - 1, y - 1, z - 1))));
-		}
-
-		///////////////////////////////////////
-		//
-		//	Noise [0, 1]
-		//
-		[[nodiscard]]
-		value_type noise1D_0_1(value_type x) const noexcept
-		{
-			return noise1D(x)
-				* value_type(0.5) + value_type(0.5);
-		}
-
-		[[nodiscard]]
-		value_type noise2D_0_1(value_type x, value_type y) const noexcept
-		{
-			return noise2D(x, y)
-				* value_type(0.5) + value_type(0.5);
-		}
-
-		[[nodiscard]]
-		value_type noise3D_0_1(value_type x, value_type y, value_type z) const noexcept
-		{
-			return noise3D(x, y, z)
-				* value_type(0.5) + value_type(0.5);
-		}
-
-		///////////////////////////////////////
-		//
-		//	Accumulated octave noise
-		//	* Return value can be outside the range [-1, 1]
-		//
-		[[nodiscard]]
-		value_type accumulatedOctaveNoise1D(value_type x, std::int32_t octaves) const noexcept
-		{
-			value_type result = 0;
-			value_type amp = 1;
-
-			for (std::int32_t i = 0; i < octaves; ++i)
-			{
-				result += noise1D(x) * amp;
-				x *= 2;
-				amp /= 2;
-			}
-
-			return result; // unnormalized
-		}
-
-		[[nodiscard]]
-		value_type accumulatedOctaveNoise2D(value_type x, value_type y, std::int32_t octaves) const noexcept
-		{
-			value_type result = 0;
-			value_type amp = 1;
-
-			for (std::int32_t i = 0; i < octaves; ++i)
-			{
-				result += noise2D(x, y) * amp;
-				x *= 2;
-				y *= 2;
-				amp /= 2;
-			}
-
-			return result; // unnormalized
-		}
-
-		[[nodiscard]]
-		value_type accumulatedOctaveNoise3D(value_type x, value_type y, value_type z, std::int32_t octaves) const noexcept
-		{
-			value_type result = 0;
-			value_type amp = 1;
-
-			for (std::int32_t i = 0; i < octaves; ++i)
-			{
-				result += noise3D(x, y, z) * amp;
-				x *= 2;
-				y *= 2;
-				z *= 2;
-				amp /= 2;
-			}
-
-			return result; // unnormalized
-		}
-
-		///////////////////////////////////////
-		//
-		//	Normalized octave noise [-1, 1]
-		//
-		[[nodiscard]]
-		value_type normalizedOctaveNoise1D(value_type x, std::int32_t octaves) const noexcept
-		{
-			return accumulatedOctaveNoise1D(x, octaves)
-				/ Weight(octaves);
-		}
-
-		[[nodiscard]]
-		value_type normalizedOctaveNoise2D(value_type x, value_type y, std::int32_t octaves) const noexcept
-		{
-			return accumulatedOctaveNoise2D(x, y, octaves)
-				/ Weight(octaves);
-		}
-
-		[[nodiscard]]
-		value_type normalizedOctaveNoise3D(value_type x, value_type y, value_type z, std::int32_t octaves) const noexcept
-		{
-			return accumulatedOctaveNoise3D(x, y, z, octaves)
-				/ Weight(octaves);
-		}
-
-		///////////////////////////////////////
-		//
-		//	Accumulated octave noise clamped within the range [0, 1]
-		//
-		[[nodiscard]]
-		value_type accumulatedOctaveNoise1D_0_1(value_type x, std::int32_t octaves) const noexcept
-		{
-			return std::clamp<value_type>(accumulatedOctaveNoise1D(x, octaves)
-				* value_type(0.5) + value_type(0.5), 0, 1);
-		}
-
-		[[nodiscard]]
-		value_type accumulatedOctaveNoise2D_0_1(value_type x, value_type y, std::int32_t octaves) const noexcept
-		{
-			return std::clamp<value_type>(accumulatedOctaveNoise2D(x, y, octaves)
-				* value_type(0.5) + value_type(0.5), 0, 1);
-		}
-
-		[[nodiscard]]
-		value_type accumulatedOctaveNoise3D_0_1(value_type x, value_type y, value_type z, std::int32_t octaves) const noexcept
-		{
-			return std::clamp<value_type>(accumulatedOctaveNoise3D(x, y, z, octaves)
-				* value_type(0.5) + value_type(0.5), 0, 1);
-		}
-
-		///////////////////////////////////////
-		//
-		//	Normalized octave noise [0, 1]
-		//
-		[[nodiscard]]
-		value_type normalizedOctaveNoise1D_0_1(value_type x, std::int32_t octaves) const noexcept
-		{
-			return normalizedOctaveNoise1D(x, octaves)
-				* value_type(0.5) + value_type(0.5);
-		}
-
-		[[nodiscard]]
-		value_type normalizedOctaveNoise2D_0_1(value_type x, value_type y, std::int32_t octaves) const noexcept
-		{
-			return normalizedOctaveNoise2D(x, y, octaves)
-				* value_type(0.5) + value_type(0.5);
-		}
-
-		[[nodiscard]]
-		value_type normalizedOctaveNoise3D_0_1(value_type x, value_type y, value_type z, std::int32_t octaves) const noexcept
-		{
-			return normalizedOctaveNoise3D(x, y, z, octaves)
-				* value_type(0.5) + value_type(0.5);
-		}
-
-		///////////////////////////////////////
-		//
-		//	Serialization
-		//
-		void serialize(std::array<std::uint8_t, 256>& s) const noexcept
-		{
-			for (std::size_t i = 0; i < 256; ++i)
-			{
-				s[i] = p[i];
-			}
-		}
-
-		void deserialize(const std::array<std::uint8_t, 256>& s) noexcept
-		{
-			for (std::size_t i = 0; i < 256; ++i)
-			{
-				p[256 + i] = p[i] = s[i];
-			}
-		}
-
-		///////////////////////////////////////
-		//
-		//	Legacy interface
-		//
-		[[deprecated("use noise1D() instead")]]
-		double noise(double x) const;
-		[[deprecated("use noise2D() instead")]]
-		double noise(double x, double y) const;
-		[[deprecated("use noise3D() instead")]]
-		double noise(double x, double y, double z) const;
-
-		[[deprecated("use noise1D_0_1() instead")]]
-		double noise0_1(double x) const;
-		[[deprecated("use noise2D_0_1() instead")]]
-		double noise0_1(double x, double y) const;
-		[[deprecated("use noise3D_0_1() instead")]]
-		double noise0_1(double x, double y, double z) const;
-
-		[[deprecated("use accumulatedOctaveNoise1D() instead")]]
-		double octaveNoise(double x, std::int32_t octaves) const;
-		[[deprecated("use accumulatedOctaveNoise2D() instead")]]
-		double octaveNoise(double x, double y, std::int32_t octaves) const;
-		[[deprecated("use accumulatedOctaveNoise3D() instead")]]
-		double octaveNoise(double x, double y, double z, std::int32_t octaves) const;
-
-		[[deprecated("use accumulatedOctaveNoise1D_0_1() instead")]]
-		double octaveNoise0_1(double x, std::int32_t octaves) const;
-		[[deprecated("use accumulatedOctaveNoise2D_0_1() instead")]]
-		double octaveNoise0_1(double x, double y, std::int32_t octaves) const;
-		[[deprecated("use accumulatedOctaveNoise3D_0_1() instead")]]
-		double octaveNoise0_1(double x, double y, double z, std::int32_t octaves) const;
-	};
-
-	using PerlinNoise = BasicPerlinNoise<double>;
+double ValueNoise_2D(double x, double y) {
+  double total = 0,
+         frequency = pow(2, numOctaves),
+         amplitude = 1;
+  for (int i = 0; i < numOctaves; ++i) {
+    frequency /= 2;
+    amplitude *= persistence;
+    total += InterpolatedNoise((primeIndex + i) % maxPrimeIndex,
+        x / frequency, y / frequency) * amplitude;
+  }
+  return total / frequency;
 }
