@@ -178,8 +178,9 @@ Player *World::get_player() {
 }
 
 void World::printInventory() {
+  Player *player = this->get_player();
   for (int i = 0; i < player->inventory.size(); i++) {
-    
+    this->push_event(std::move(std::unique_ptr<Event>(new TextEvent(item_id_to_name(player->inventory[i].getItemID()))))); 
   }
 }
 
