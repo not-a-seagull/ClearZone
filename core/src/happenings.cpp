@@ -135,8 +135,8 @@ std::shared_ptr<std::shared_ptr<Happenings[]>[]> get_happenings(World *world) {
   res[5][1] = Happenings(world, "Salmon flows down the stream");
   HappenResult hr7 = HappenResult(world, "You catch a fish and consume it.");
   HappenResult hr8 = HappenResult(world, "You move on.");
-  Opportunity op7 = Opportunity(world, "Go fishing");
-  Opportunity op8 = Opportunity(world, "Ignore");
+  Opportunity op7 = Opportunity("Go fishing");
+  Opportunity op8 = Opportunity("Ignore");
   res[5][1].results.push_back(std::make_pair(op7, hr7));
   res[5][1].results.push_back(std::make_pair(op8, hr8));
   
