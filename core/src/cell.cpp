@@ -4,7 +4,7 @@
 using namespace std;
 
 Cell::Cell() {
-    this->cellBiome = Forest;
+    this->cellBiome = Biome;
 }
 
 Cell::Cell(Biome b, vector<Entity> e) {

@@ -16,7 +16,7 @@ class Entity {
         vector<Item> inventory;
     public:
         Entity();
-        Entity(string, int, int, int, int, int, int, double, long, int, vector<Item>);
+        Entity(string, int, int, int, int, int, int, double, long, int);
 
         string getEntityType() const;
         void setEntityType(string);
