@@ -11,5 +11,9 @@ class Caravan : public Entity{
     public:
         Caravan();
         Caravan(int, int, long, int, int, vector<Item>);
+
+        void trade();
+        void rob();
+        void getRobbed();
 };
 #endif

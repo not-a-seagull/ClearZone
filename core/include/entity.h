@@ -14,7 +14,6 @@ using namespace std;
 #define RIGHT 3
 
 class Entity {
-
     protected:
         int entityType;
         int health;
