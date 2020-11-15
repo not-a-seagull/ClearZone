@@ -9,7 +9,7 @@
 #include "cell.h"
 #include "choice.h"
 #include "player.h"
-#include "PerlinNoise.hpp"
+//#include "PerlinNoise.hpp"
 
 using namespace std;
 
