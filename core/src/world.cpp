@@ -66,7 +66,7 @@ World::World(int width, int height, int octaves, int seed, float scale) {
   }
 
   // This loop iterates over the map and determines river tiles.
-  /*for (int i = 0; i < width; i++) {
+  for (int i = 0; i < width; i++) {
     this->cells[i] = std::move(std::make_unique<Cell[]>(height));
     for (int j = 0; j < height; j++) {
       float riverProbability = 0.1f; // Probability that a river / stream tile will on this cell;
@@ -79,7 +79,7 @@ World::World(int width, int height, int octaves, int seed, float scale) {
       }
       this->cells[i][j] = ((float)std::rand() / (float)RAND_MAX) < riverProbability ? 1 : 0; 
     }
-  }*/
+  }
 
 }
 

@@ -27,7 +27,7 @@
 
 #include "animation.h"
 #include "panic.h"
-#include "world_shim.h"
+#include "cstring"
 
 #define GI_MAGIC_NUMBER 66666
 
