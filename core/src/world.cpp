@@ -40,10 +40,19 @@ std::shared_ptr<std::string[]> get_directionals() {
 }
 
 // I'm very tired
-World::World() { 
-  for (int i = 0; i < 16; i++) {
-    for (int j = 0; j < 16; j++) {
-      //            Cells[i][j] = Cell;
+World::World(int width, int height) { 
+  std::srand(time(NULL));
+  std::unique_ptr<Entity> plr = std::unique_ptr<Entity>(new Player(0, 0, 0, 0, 0));
+  plr->indexX = 100;
+  plr->indexY = 100;
+  this->width = width;
+  this->height = height;
+  this->entities.push_back(std::move(plr));
+  this->cells = std::move(std::make_unique<std::unique_ptr<Cell[]>[]>(width));
+  for (int i = 0; i < width; i++) {
+    this->cells[i] = std::move(std::make_unique<Cell[]>(height));
+    for (int j = 0; j < height; j++) {
+      this->cells[i][j] = Cell(std::rand() % 2);
     }
   }
 }
@@ -59,12 +68,11 @@ std::unique_ptr<Event> World::next_event() {
 
 void World::generate_events() {
   // just generate move and render events for now
-  std::shared_ptr<char[]> tiles = std::shared_ptr<char[]>(new char[32 * 32]);
-  memset(tiles.get(), 'B', 32 * 32);
+  std::shared_ptr<char[]> tiles = this->compile_map(); 
 
   Player *ply = this->get_player();
-  int x = ply->indexX;
-  int y = ply->indexY;
+  int x = 15;
+  int y = 15;
 
   std::unique_ptr<Event> mde = std::unique_ptr<Event>(new MapDpyEvent(tiles, x, y));
   std::unique_ptr<Event> ce = std::unique_ptr<Event>(
@@ -94,6 +102,11 @@ Player *World::get_player() {
   return nullptr;
 }
 
+
+static char BIOME_TABLE[] = {
+   'F', 'D',
+};
+
 std::shared_ptr<char[]> World::compile_map() {
   Player *ply = this->get_player();
   int left = ply->indexX - 16;
@@ -113,10 +126,11 @@ std::shared_ptr<char[]> World::compile_map() {
     top = bottom - 32;
   }
 
-  std_shared<char[]> res = std::make_shared<char[]>(32*32);
-  for (int i = left; i < right; i++) {
-    for (int j = top; j < bottom; j++) {
-      res[(j * 32) + i] = Biome::GetBiome(this->Cells[j][i]);
+  std::shared_ptr<char[]> res = std::shared_ptr<char[]>(new char[32*32]); 
+  memset(res.get(), 'B', 32 * 32);
+  for (int i = 0; i < 32; i++) {
+    for (int j = 0; j < 32; j++) {
+      res[(j * 32) + i] = BIOME_TABLE[this->cells[left + i][top + j].GetBiome()];
     }
   }
 

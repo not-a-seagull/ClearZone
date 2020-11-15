@@ -153,6 +153,11 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img, int px, int py) {
           g = 0.5f;
           b = 0.0f;
           break;
+        case 'D':
+          r = 1.0f;
+          g = 0.5f;
+          b = 0.0f;
+          break;
         default:
           r = 0.0f;
           g = 0.0f;
@@ -160,7 +165,7 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img, int px, int py) {
           break;
       }
 
-      cairo_set_source_rgb(cr, r, g, b);
+      cairo_set_source_rgb(cr, r, g, b);     
 
       int x = cell_width * i;
       int y = cell_height * j;
@@ -169,12 +174,12 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img, int px, int py) {
     }
   }
 
-  cairo_set_line_width(cr, 0.6);
-  cairo_set_source_rgb(cr, 0.4, 0.4, 0.4);
-  cairo_move_to(cr, cell_width * px, cell_height * py);
-  cairo_line_to(cr, cell_width * (px + 1), cell_height * (py + 1));
-  cairo_move_to(cr, cell_width * px, cell_height * (py + 1));
-  cairo_line_to(cr, cell_width * (px + 1), cell_height * py);
+  double offset_x = cell_width * 0.1;
+  double offset_y = cell_height * 0.1;
+
+//  cairo_set_source_rgb(cr, 0.4, 0.4, 0.4);
+//  cairo_rectangle(cr, (px * cell_width) + offset_x, (py * cell_height) + offset_y, ((px + 1) * (cell_width)) - offset_x, ((py + 1) * (cell_height + 1)) - offset_y);
+//  cairo_fill(cr);
 
   if (cairo_status(cr) != CAIRO_STATUS_SUCCESS) {
     panic("Cairo failed!");
@@ -192,7 +197,7 @@ void GInterface::initialize_world() {
 
   this->dpy_choice(init_choices, 2, [this](ptrdiff_t load) {
     if (load == 0) {
-      this->world = std::unique_ptr<World>(new World());
+      this->world = std::unique_ptr<World>(new World(250, 250));
     } else {
       panic("Unable to load world from file yet");
     }

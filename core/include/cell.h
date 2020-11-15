@@ -4,15 +4,17 @@
 using namespace std;
 #ifndef CELL_H
 #define CELL_H
-#include "biome.h"
+
 #include "entity.h"
 #include "item.h"
 
 class Cell {
  protected:
-  int8 biomeID;
+  uint8_t biomeID;
 
  public:
-  Cell(int8 biomeID);
-}
+  Cell();
+  Cell(uint8_t biomeID);
+  uint8_t GetBiome() const;
+};
 #endif

@@ -4,8 +4,7 @@
 #include <vector>
 using namespace std;
 
-Cell::Cell() { this->cellBiomeID = Biome; }
+Cell::Cell() { this->biomeID = 0; }
+Cell::Cell(uint8_t Biome) { this->biomeID = Biome; }
 
-Cell::Cell(Biome biome) { this->cellBiomeID = b; }
-
-uint8_t Cell::GetBiome() { return this->cellBiomeID; }
+uint8_t Cell::GetBiome() const { return this->biomeID; }

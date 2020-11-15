@@ -6,7 +6,6 @@
 #include <queue>
 #include <vector>
 
-#include "biome.h"
 #include "cell.h"
 #include "choice.h"
 #include "player.h"
@@ -15,8 +14,7 @@ using namespace std;
 
 class World {
  protected:
-  Biome biomeList;
-  unique_ptr<unique_ptr<Cell[]>[]> Cells;
+  unique_ptr<unique_ptr<Cell[]>[]> cells;
   int width;
   int height;
 
@@ -26,7 +24,7 @@ class World {
   void generate_events();
   std::shared_ptr<char[]> compile_map();
  public:
-  World();
+  World(int width, int height);
 
   void moveEntity(string);
   unique_ptr<Event> next_event();
