@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class Biome {
+static class Biome {
  protected:
   static std::vector<char> biomes = {'%', '\'', '\"', '{'};
 
