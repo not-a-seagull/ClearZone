@@ -79,12 +79,19 @@ int GInterface::run() {
 
 GInterface::~GInterface() {}
 
+void scrl(GtkWidget *tbox) {
+  GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(tbox));
+  double lower = gtk_adjustment_get_upper(adj);
+  gtk_adjustment_set_value(adj, lower);
+}
+
 void GInterface::dpy_text(const char *line) {
   GtkWidget *label;
   label = gtk_label_new(line);
   gtk_box_pack_start(GTK_BOX(this->textbox), label, FALSE, FALSE, 0);
   printf("Text: %s", line);
   gtk_widget_show(label);
+  scrl(this->scrollbox);
 }
 
 void GInterface::dpy_yesno(const char *prompt,
@@ -106,6 +113,7 @@ void GInterface::dpy_yesno(const char *prompt,
 
   gtk_widget_show_all(yesnobox);
   this->choicebox = yesnobox;
+  scrl(this->scrollbox);
 }
 
 void GInterface::dpy_choice(std::shared_ptr<std::string[]> choices,
@@ -132,6 +140,7 @@ void GInterface::dpy_choice(std::shared_ptr<std::string[]> choices,
   gtk_box_pack_start(GTK_BOX(this->textbox), choicebox, FALSE, FALSE, 0);
   gtk_widget_show_all(choicebox);
   this->choicebox = choicebox;
+  scrl(this->scrollbox);
 }
 
 void GInterface::stop() { gtk_main_quit(); }
@@ -292,6 +301,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
   interface->parent = parent;
   interface->textbox = textbox;
   interface->drawbox = drawbox;
+  interface->scrollbox = texttainer;
 
   gtk_widget_show_all(parent);
   interface->dpy_text("Welcome to ClearZone!\n");

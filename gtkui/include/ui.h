@@ -55,6 +55,8 @@ class GInterface {
   GtkWidget *drawbox;
   //! Container for current choicebox.
   GtkWidget *choicebox;
+  //! Scrolling box.
+  GtkWidget *scrollbox;
 
   //! Current image surface for cairo.
   cairo_surface_t *current_drawbox;

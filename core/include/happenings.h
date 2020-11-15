@@ -27,7 +27,8 @@
 
 #include "choice.h"
 #include "item.h"
-#include "world.h"
+
+class World;
 
 class HappenResult {
   public:
@@ -37,6 +38,7 @@ class HappenResult {
     int health_gain; 
     std::optional<int> items_robbed;
 
+    HappenResult(World *worldc, const std::string& textc) : world(worldc), text(textc) {}
     HappenResult(World *worldc, const std::string& textc, std::vector<Item> itemsc, int health_gainc) : world(worldc), text(textc), items(itemsc), health_gain(health_gainc) {}
 
     HappenResult(World *worldc, const std::string& textc, std::vector<Item> itemsc, int health_gainc, int items_robbedc) : world(worldc), text(textc), items(itemsc), health_gain(health_gainc), items_robbed(items_robbedc) {}
@@ -60,12 +62,14 @@ class Happenings {
      std::optional<HappenResult> single_result;
      std::vector<std::pair<Opportunity, HappenResult>> results;
 
+     Happenings() {}
      Happenings(World *worldc, const std::string& promptc, HappenResult res) : world(worldc), prompt(promptc), single_result(res) {}
-     Happenings(World *worldc, const std::string& promptc, std::vector<std::pair<Opportunity, HappenResult>> res) : world(worldc), prompt(promptc), results(res) {}
+     Happenings(World *worldc, const std::string& promptc) : world(worldc), prompt(promptc) {}
 
      std::unique_ptr<Event> to_event();
 };
 
+#define HAPPENINGS_PER_BIOME 1
 std::shared_ptr<std::shared_ptr<Happenings[]>[]> get_happenings(World *world);
 
 #endif
