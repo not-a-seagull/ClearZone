@@ -8,16 +8,14 @@ using namespace std;
 #include "biome.h"
 class Cell{
     protected:
-        Biome cellBiome;
+        int cellBiomeID;
         vector<Entity> ent;
-        int index1 = 0, index2 = 0;
     public:
         Cell();
-        Cell(int, int);
         Cell(Biome, vector<Entity>)
 
-        Biome *getBiome() const;
-        void setBiome(const Biome&);
+        int getBiome() const;
+        void setBiome(int biomeID);
 
         vector<Entity> getEnt() const;
         void setEnt(vector<Entity>);

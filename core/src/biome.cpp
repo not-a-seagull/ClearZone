@@ -2,13 +2,19 @@
 #include "biome.h"
 using namespace std;
 
-Biome::Biome() {
-    this->ID = 0;
-    this->color = "Blank";
+BiomeList::AddBiome(char biomeColor) {
+    biomes.push_back(biomeColor);
 }
 
-Biome::Biome(string s, int i) {
-    this->color = s;
-    this->ID = i;
+BiomeList::GetBiome(int biomeID) {
+    return biomes(i);
+}
+
+BiomeList::SetBiome(int biomeID, char biomeColor) {
+    biomes[biomeID] = biomeColor;
+}
+
+BiomeList::GetLength(int biomeID) {
+    return biomes.size();
 }
 

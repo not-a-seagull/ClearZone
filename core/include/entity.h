@@ -14,7 +14,6 @@ class Entity {
         long sexAppeal;
         int numEntities;
         vector<Item> inventory;
-        int indexX, indexY;
     public:
         Entity();
         Entity(string, int, int, int, int, int, int, double, long, int);
@@ -50,6 +49,5 @@ class Entity {
         void setSexAppeal(long);
 
         void addItem(Item);
-        void moveEntity(string);
 };
 #endif

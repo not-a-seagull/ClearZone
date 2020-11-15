@@ -6,9 +6,9 @@ using namespace std;
 #include "cell.h"
 class World {
     protected:
+        BiomeList biomeList;
         unique_ptr<unique_ptr<Cell[]>[]> Cells;
     public:
-        void newWorld();
-        void moveEntity(string);
+        World();
 };
 #endif

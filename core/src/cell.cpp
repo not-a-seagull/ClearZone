@@ -4,22 +4,16 @@
 using namespace std;
 
 Cell::Cell() {
-    this->cellBiome = Biome;
+    this->cellBiomeID = Biome;
 }
-Cell::Cell(int ind1, int ind2) {
-    this->cellBiome = Biome;
-    this->index1 = ind1;
-    this->index2 = ind2;
-}
+
 Cell::Cell(Biome b, vector<Entity> e) {
     this->ent = e;
-    this->cellBiome = b;
+    this->cellBiomeID = b;
 }
-Biome *Cell::getBiome() const { return this->cellBiome; }
-void Cell::setBiome(const Biome& b) { this->cellBiome = b; }
+
+int Cell::getBiome() const { return this->cellBiomeID; }
+void Cell::setBiome(const int b) { this->cellBiomeID = b; }
 
 vector<Entity> Cell::getEnt() const { return this->ent; }
 void Cell::setEnt(vector<Entity> e) { this->ent = e; }
-
-int Cell::getIndexX() const { return this->index1; }
-int Cell::getIndexY() const { return this->index2; } 
