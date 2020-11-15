@@ -19,6 +19,7 @@ class Entity {
         int health;
         long sexAppeal;
         vector<Item> inventory;
+        int speed;
     public:
 
         Entity();
