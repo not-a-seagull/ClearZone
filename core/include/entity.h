@@ -11,7 +11,7 @@ class Entity {
         int entityType;
         int health;
         long sexAppeal;
-        vector<Item> inventory;
+        int indexX, indexY;
     public:
         Entity();
         Entity(int, int, long, int, int);

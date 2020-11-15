@@ -21,8 +21,9 @@
 #include "world.h"
 
 int main(int argc, char **argv) {
-  GInterface *interface = ginterface_init(argc, argv);
-  ginterface_run(interface);
-  ginterface_drop(interface);
+  GInterface *interface = new GInterface(argc, argv);
+  interface->run();
+  delete interface;
+
   return 0;
 }

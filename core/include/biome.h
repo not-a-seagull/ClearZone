@@ -5,32 +5,16 @@
 
 using namespace std;
 
-
-// class Biome {
-//     protected:
-//         string color;
-//         int ID;
-//     public:
-//         Biome();
-//         Biome(string, int);
-
-//         string getColor() const;
-//         void setColor(string);
-
-//         int getID() const;
-//         void setID(int);
-// };
-
 class Biome {
-    protected:
-        std::vector(char) biomes = {'%', '\'', '\"', '{'};
+ protected:
+  std::vector(char) biomes = {'%', '\'', '\"', '{'};
 
-    public: 
-        void addBiome(char biomeColor);
+ public:
+  void addBiome(char biomeColor);
 
-        char getBiome(int biomeID);
-        void setBiome(int biomeID, char biomeColor);
+  char getBiome(int biomeID);
+  void setBiome(int biomeID, char biomeColor);
 
-        int getLength();
-}
+  int getLength();
+};
 #endif

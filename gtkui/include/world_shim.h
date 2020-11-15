@@ -25,6 +25,7 @@ extern "C" {
 #endif
 
 void initialize_world(GInterface *ginterface);
+void world_tick(GInterface *interface);
 
 #if __cplusplus
 }
