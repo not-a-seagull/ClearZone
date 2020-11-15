@@ -1,10 +1,11 @@
 #include <iostream>
 #include <vector>
-#include "item.h"
+
 using namespace std;
 
 #ifndef ENTITY_H
 #define ENTITY_H
+#include "item.h"
 class Entity {
     protected:
         string entityType;

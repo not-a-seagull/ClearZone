@@ -1,18 +1,18 @@
-#ifndef CELL_H
-#define CELL_H
-
 #include <iostream>
 #include <vector>
-#include "biome.h"
-#include "entity.h"
+
 using namespace std;
+#ifndef CELL_H
+#define CELL_H
+#include "entity.h"
+#include "biome.h"
 class Cell{
     protected:
         Biome cellBiome;
         vector<Entity> ent;
     public:
         Cell();
-        Cell(Biome, vector<Entity>);
+        Cell(Biome, vector<Entity>)
 
         Biome *getBiome() const;
         void setBiome(const Biome&);
