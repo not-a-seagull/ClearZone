@@ -144,8 +144,8 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img, int px, int py) {
 
   const int CELLS_X = 32;
   const int CELLS_Y = 32;
-  int cell_width = SURFACE_WIDTH / CELLS_X;
-  int cell_height = SURFACE_HEIGHT / CELLS_Y;
+  double cell_width = SURFACE_WIDTH / CELLS_X;
+  double cell_height = SURFACE_HEIGHT / CELLS_Y;
 
   for (int i = 0; i < CELLS_X; i++) {
     for (int j = 0; j < CELLS_Y; j++) {
@@ -188,17 +188,17 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img, int px, int py) {
 
       int x = cell_width * i;
       int y = cell_height * j;
-      cairo_rectangle(cr, x, y, x + cell_width, y + cell_height);
+      cairo_rectangle(cr, x, y, cell_width, cell_height);
       cairo_fill(cr);
     }
   }
 
-  double offset_x = cell_width * 0.1;
-  double offset_y = cell_height * 0.1;
+  double offset_x = (double)cell_width * 0.1;
+  double offset_y = (double)cell_height * 0.1;
 
-//  cairo_set_source_rgb(cr, 0.4, 0.4, 0.4);
-//  cairo_rectangle(cr, (px * cell_width) + offset_x, (py * cell_height) + offset_y, ((px + 1) * (cell_width)) - offset_x, ((py + 1) * (cell_height + 1)) - offset_y);
-//  cairo_fill(cr);
+  cairo_set_source_rgb(cr, 0.4, 0.4, 0.9);
+  cairo_rectangle(cr, (px * cell_width) + offset_x, (py * cell_height) + offset_y, cell_width - (offset_x * 2), cell_height - (offset_y * 2));
+  cairo_fill(cr);
 
   if (cairo_status(cr) != CAIRO_STATUS_SUCCESS) {
     panic("Cairo failed!");

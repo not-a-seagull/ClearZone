@@ -93,11 +93,8 @@ std::unique_ptr<Event> World::next_event() {
 
 void World::generate_events() {
   // just generate move and render events for now
-  std::shared_ptr<char[]> tiles = this->compile_map(); 
-
-  Player *ply = this->get_player();
-  int x = 15;
-  int y = 15;
+  int x,y;
+  std::shared_ptr<char[]> tiles = this->compile_map(x, y); 
 
   std::unique_ptr<Event> mde = std::unique_ptr<Event>(new MapDpyEvent(tiles, x, y));
   std::unique_ptr<Event> ce = std::unique_ptr<Event>(
@@ -127,7 +124,7 @@ Player *World::get_player() {
   return nullptr;
 }
 
-std::shared_ptr<char[]> World::compile_map() {
+std::shared_ptr<char[]> World::compile_map(int &playerx, int &playery) {
   Player *ply = this->get_player();
   int left = ply->indexX - 16;
   int top = ply->indexY - 16;
@@ -145,6 +142,9 @@ std::shared_ptr<char[]> World::compile_map() {
     bottom = this->height;
     top = bottom - 32;
   }
+
+  playerx = ply->indexX - left;
+  playery = ply->indexY - top;
 
   std::shared_ptr<char[]> res = std::shared_ptr<char[]>(new char[32*32]); 
   memset(res.get(), 'B', 32 * 32);

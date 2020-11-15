@@ -18,10 +18,9 @@ class Entity {
         int entityType;
         int health;
         long sexAppeal;
-        Item inventory;
         int speed;
     public:
-
+        vector<Item> inventory;
         Entity();
         Entity(int, int, long, int, int);
 
