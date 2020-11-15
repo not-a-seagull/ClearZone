@@ -69,7 +69,7 @@ class Happenings {
      std::unique_ptr<Event> to_event();
 };
 
-#define HAPPENINGS_PER_BIOME 1
+#define HAPPENINGS_PER_BIOME 2
 std::shared_ptr<std::shared_ptr<Happenings[]>[]> get_happenings(World *world);
 
 #endif

@@ -92,6 +92,7 @@ World::World(int width, int height, int octaves, int seed, float scale) {
   noise.numOctaves = octaves;
 //  siv::PerlinNoise perlin(seed);
   std::srand(time(NULL));
+  this->happenings = get_happenings(this);
   std::unique_ptr<Entity> plr = std::unique_ptr<Entity>(new Player(0, 0, 0, 0, 0));
   plr->indexX = (int)width / 2;
   plr->indexY = (int)width / 2;
