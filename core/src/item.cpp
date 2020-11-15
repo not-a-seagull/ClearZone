@@ -2,13 +2,12 @@
 using namespace std;
 #include "item.h"
 
-Item::Item() {
-    this->itemID = 0;
-}
+Item::Item() { this->itemID = 0; }
 
-Item::Item(int i) {
-    this->itemID = i;
-}
+Item::Item(int i) { this->itemID = i; }
 
-int Item::getItemID() const { return this->itemI;D }
+int Item::getItemID() const {
+  return this->itemI;
+  D
+}
 void Item::setItemID(int i) { this->itemID = i; }

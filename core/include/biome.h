@@ -6,15 +6,15 @@
 using namespace std;
 
 class Biome {
-    protected:
-        std::vector(char) biomes = {'%', '\'', '\"', '{'};
+ protected:
+  std::vector(char) biomes = {'%', '\'', '\"', '{'};
 
-    public: 
-        void addBiome(char biomeColor);
+ public:
+  void addBiome(char biomeColor);
 
-        char getBiome(int biomeID);
-        void setBiome(int biomeID, char biomeColor);
+  char getBiome(int biomeID);
+  void setBiome(int biomeID, char biomeColor);
 
-        int getLength();
-}
+  int getLength();
+};
 #endif

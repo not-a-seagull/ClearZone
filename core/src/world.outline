@@ -1,17 +1,2 @@
-__World Class__
-            |
-            |
-            |_ int worldSize
-            |
-            |_ Cell Cells[worldSize][worldSize]
-            |
-            |
-            |_ gfsdjkl
-            |
-            |
-            |
-            |
-            |
-            |
-            |
-            |
+__World Class__ | | | _ int worldSize | | _ Cell Cells[worldSize][worldSize] | |
+    | _ gfsdjkl | | | | | | | |

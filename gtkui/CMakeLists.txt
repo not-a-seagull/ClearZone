@@ -32,11 +32,10 @@ ADD_DEFINITIONS("${GTK3_CFLAGS_OTHER}")
 #Set new source files here, boys - j.n.
 SET(CZG_SOURCES 
   ${CZG_SRC}/main.cpp 
-  ${CZG_SRC}/world_shim.cpp
+  ${CZG_SRC}/ui.cpp
   ${CZG_SRC}/animation.c 
   ${CZG_SRC}/panic.c 
   ${CZG_SRC}/stb_impl.c
-  ${CZG_SRC}/ui.c
 )
 
 ADD_EXECUTABLE(ClearZoneGtk ${CZG_SOURCES})

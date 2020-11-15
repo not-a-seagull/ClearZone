@@ -18,59 +18,92 @@
 #ifndef CZG_UI_H
 #define CZG_UI_H
 
-#if __cplusplus
-extern "C" {
-#endif
-
+#include <gtk/gtk.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
+#include <functional>
+#include <memory>
+#include <optional>
+
 #include "animation.h"
+#include "world.h"
 
-//! Opaque GTK object type.
-typedef void GInterface;
+class GInterface;
 
-//! Initialize the GTK system.
-GInterface *ginterface_init(int argc, char **argv);
+class ChoiceResult {
+ public:
+  GInterface *v;
+  ptrdiff_t choice;
+  ChoiceResult(GInterface *vc, ptrdiff_t choicec) : v(vc), choice(choicec) {}
+};
 
-//! Drop the GTK system.
-void ginterface_drop(GInterface *interface);
+class GInterface {
+ public:
+  //! Magic byte to match off of to verify this is a GInterface.
+  uint32_t magic;
+  //! Is this interface activated yet?
+  bool activated;
 
-//! Begin running the GTK system.
-int ginterface_run(GInterface *interface);
+  GtkApplication *app;
+  //! Parent window of everything.
+  GtkWidget *parent;
+  //! Container for text.
+  GtkWidget *textbox;
+  //! Container for drawings.
+  GtkWidget *drawbox;
+  //! Container for current choicebox.
+  GtkWidget *choicebox;
 
-//! Display some text on the GInterface.
-void ginterface_dpy_text(GInterface *interface, const char *line);
+  //! Current image surface for cairo.
+  cairo_surface_t *current_drawbox;
+  //! If we are running an animation, this will be non-null.
+  Animation *current_animation;
+  //! Current frame of the animation.
+  ptrdiff_t anim_frame;
 
-//! Display a choice on the GInterface, and add a callback for when the choice
-//! is selected.
-typedef void (*ChoiceSelection)(ptrdiff_t, GInterface*, void*);
-void ginterface_dpy_choice(GInterface *interface, const char **choices,
-                           ptrdiff_t num_choices, ChoiceSelection selector, void *user_data);
+  //! Allocated choice objects.
+  std::vector<ChoiceResult *> choices;
 
-//! Display a yes/no question on the GInterface, and add a callback for when the
-//! choice is selected.
-typedef void (*YesNoSelection)(bool);
-void ginterface_dpy_yesno(GInterface *interface, const char *prompt,
-                          YesNoSelection selector);
+  //! Pointer to the world object.
+  std::unique_ptr<World> world;
 
-//! Display an enemy on the GInterface.
-void ginterface_dpy_enemy(GInterface *interface, const unsigned char *img,
-                          uint32_t width, uint32_t height);
+  std::optional<std::function<void(bool)>> yesno_responder;
+  std::optional<std::function<void(ptrdiff_t)>> choice_responder;
 
-//! Run an animation on the GInterface.
-void ginterface_animation_overlay(GInterface *interface, const Animation *anim);
+  int argc;
+  char **argv;
 
-//! Display a map on the GInterface.
-void ginterface_dpy_map(GInterface *interface, const unsigned char *img,
-                        uint32_t cells_width, uint32_t cell_height);
+ public:
+  GInterface(int argc, char **argv);
+  ~GInterface();
 
-//! Set ginterface world.
-void ginterface_set_world(GInterface *interface, void *world);
+  int run();
+  void stop();
+  void initialize_world();
+  void world_tick();
 
-#if __cplusplus
-}
-#endif
+  //! Display some text on the GInterface.
+  void dpy_text(const char *line);
+
+  //! Display a choice on the GInterface, and add a callback for when the choice
+  //! is selected.
+  void dpy_choice(std::shared_ptr<std::string[]> choices, ptrdiff_t num_choices,
+                  std::function<void(ptrdiff_t)>);
+
+  //! Display a yes/no question on the GInterface, and add a callback for when
+  //! the choice is selected.
+  void dpy_yesno(const char *prompt, std::function<void(bool)>);
+
+  //! Display an enemy on the GInterface.
+  void dpy_enemy(const unsigned char *img, uint32_t width, uint32_t height);
+
+  //! Run an animation on the GInterface.
+  void animation_overlay(const Animation *anim);
+
+  //! Display a map on the GInterface.
+  void dpy_map(std::shared_ptr<char[]> img);
+};
 
 #endif  // CZG_UI_H
