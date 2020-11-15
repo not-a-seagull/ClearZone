@@ -177,6 +177,12 @@ Player *World::get_player() {
   return nullptr;
 }
 
+void World::printInventory() {
+  for (int i = 0; i < player->inventory.size(); i++) {
+    
+  }
+}
+
 std::shared_ptr<char[]> World::compile_map(int &playerx, int &playery) {
   Player *ply = this->get_player();
   int left = ply->indexX - 16;

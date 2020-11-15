@@ -45,6 +45,7 @@ class Entity {
   void addItem(const Item&);
   void moveEntity(int dir);
 
+
  
 };
 #endif

@@ -34,6 +34,9 @@ class World {
   Player *get_player();
   void push_event(std::unique_ptr<Event>);
   void doCombat(Humanoid &player, Entity& entity);
+
+  void printInventory();
+  
 };
 #endif
 
