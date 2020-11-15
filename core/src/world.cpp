@@ -66,7 +66,7 @@ void World::doCombat(Humanoid& player, Entity& enemy) {
     if (player.getSpeed() >= enemy.getSpeed()) {
       
       if (playerTurn) {
-        enemy.setHealth(enemy.getHealth() - (player.getStrength() * playerDamageMultipler));
+        enemy.setHealth(enemy.getHealth() - (player.getStrength() * playerDamageMultiplyer));
         playerTurn = false;
       } else if (!playerTurn) {
         player.setHealth(player.getHealth() - 1);
@@ -77,7 +77,7 @@ void World::doCombat(Humanoid& player, Entity& enemy) {
         player.setHealth(player.getHealth() - 1);
         playerTurn = true;
       } else if (playerTurn) {
-        enemy.setHealth(enemy.getHealth() - (player.getStrength() * playerDamageMultipler));
+        enemy.setHealth(enemy.getHealth() - (player.getStrength() * playerDamageMultiplyer));
         playerTurn = false;
       }
     }
@@ -88,6 +88,7 @@ void World::doCombat(Humanoid& player, Entity& enemy) {
 World::World(int width, int height, int octaves, int seed, float scale) { 
 //  siv::PerlinNoise perlin(seed);
   std::srand(time(NULL));
+  this->happenings = get_happenings(this);
   std::unique_ptr<Entity> plr = std::unique_ptr<Entity>(new Player(0, 0, 0, 0, 0));
   plr->indexX = (int)width / 2;
   plr->indexY = (int)width / 2;

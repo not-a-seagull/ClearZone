@@ -100,6 +100,8 @@ std::shared_ptr<std::shared_ptr<Happenings[]>[]> get_happenings(World *world) {
   res[0][0].results.push_back(std::make_pair(o2, hr2));
   res[0][0].results.push_back(std::make_pair(o3, hr3));
 
+  res[0][1] = Happenings(world, "You find the decaying carcass of a wolf.", HappenResult(world, "The meat is unappetizing."));
+
 //  res[0][1] = res[0][0];
 
 //  HappenResult hr4(world, "A wolf leaps out and attacks you!", -1);
@@ -110,18 +112,22 @@ std::shared_ptr<std::shared_ptr<Happenings[]>[]> get_happenings(World *world) {
   res[1] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
 
   res[1][0] = Happenings(world, "The desert sprawls far and wide for as far as the eye can see.", HappenResult(world, "You feel nothing but dehydration."));
+  res[1][1] = Happenings(world, "Birds circle above you.", HappenResult(world, "It doesn't do much for confidence"));
   
   res[2] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
 
   res[2][0] = Happenings(world, "The peace inspired by the plains is a serene break from the chaos of life.", HappenResult(world, "You feel releaxed."));
+  res[2][1] = Happenings(world, "An eerie screeching noise upsets the quiet.", HappenResult(world, "You can't tell where it came from..."));
 
   res[3] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
 
   res[3][0] = Happenings(world, "The jungle may be hard to naviate, but at least you're safe from predators, for now.", HappenResult(world, "You should get out of here as soon as possible."));
+  res[3][1] = Happenings(world, "You see something swinging from the trees.", HappenResult(world, "At least, you thought you saw something."));
 
   res[4] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
 
   res[4][0] = Happenings(world, "The city falls down around you. What could have possible happened here?", HappenResult(world, "You feel nervous."));
+  res[4][1] = Happenings(world, "You hear yelling, but can't tell where it comes from.", HappenResult(world, "What does it all mean?"));
 
   return res;
 }
