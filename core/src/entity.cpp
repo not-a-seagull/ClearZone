@@ -8,10 +8,10 @@ Entity::Entity() {
     this->strength = 0;
     this->sexAppeal = 0; //(me)
     this->numEntities = 1;
-    
+
 }
 
-Entity::Entity(string s, int heal, int intel, int charis, int dex, int wisdom, int constit, double str, long sex, int num) {
+Entity::Entity(string s, int heal, int intel, int charis, int dex, int wisdom, int constit, double str, long sex, int num, int inx, int iny) {
     this->entityType = s;
     this->health = heal;
     this->intelligence = intel;
@@ -22,6 +22,8 @@ Entity::Entity(string s, int heal, int intel, int charis, int dex, int wisdom, i
     this->strength = str;
     this->sexAppeal = sex;
     this->numEntities = num;
+    this->indexX = inx;
+    this->indexY = iny;
 }
 
 string Entity::getEntityType() { return this->entityType; } 
