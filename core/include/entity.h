@@ -8,9 +8,10 @@ using namespace std;
 
 #include "item.h"
 
-enum Direction {
-  Up, Down, Left, Right
-} Direction;
+#define UP 0
+#define DOWN 1
+#define LEFT 2
+#define RIGHT 3
 
 class Entity {
  protected:
@@ -28,7 +29,7 @@ class Entity {
 
   Entity();
   Entity(string s, int heal, int intel, int charis, int dex, int wisdom,
-               int constit, double str, long sex, int num);
+         int constit, double str, long sex, int num);
 
   int getSubclass() const { return this->subclass; }
   int getEntityType() const;
@@ -41,6 +42,6 @@ class Entity {
   void setSexAppeal(long);
 
   void addItem(Item);
-  void moveEntity(Direction dir);
+  void moveEntity(int dir);
 };
 #endif

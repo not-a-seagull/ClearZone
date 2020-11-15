@@ -17,7 +17,7 @@ class Cell {
   Cell();
   Cell(Biome, vector<Entity>);
 
-      int getBiome() const;
+  int getBiome() const;
   void setBiome(int biomeID);
 };
 #endif
