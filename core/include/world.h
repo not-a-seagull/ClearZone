@@ -5,6 +5,7 @@
 #include <memory>
 #include <queue>
 
+#include "biome.h"
 #include "cell.h"
 #include "choice.h"
 
@@ -12,7 +13,7 @@ using namespace std;
 
 class World {
  protected:
-  BiomeList biomeList;
+  Biome biomeList;
   unique_ptr<unique_ptr<Cell[]>[]> Cells;
 
   std::queue<std::unique_ptr<Event>> event_queue;

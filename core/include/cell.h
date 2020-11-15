@@ -5,6 +5,8 @@ using namespace std;
 #ifndef CELL_H
 #define CELL_H
 #include "biome.h"
+#include "entity.h"
+#include "item.h"
 
 class Cell {
  protected:
@@ -13,7 +15,7 @@ class Cell {
 
  public:
   Cell();
-  Cell(Biome, vector<Entity>)
+  Cell(Biome, vector<Entity>);
 
       int getBiome() const;
   void setBiome(int biomeID);

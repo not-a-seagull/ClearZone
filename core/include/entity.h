@@ -6,6 +6,8 @@ using namespace std;
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "item.h"
+
 class Entity {
  protected:
   int entityType;
@@ -21,8 +23,6 @@ class Entity {
 
   int getEntityType() const;
   void setEntityType(int);
-  string getEntityType() const;
-  void setEntityType(string);
 
   int getNumEntities() const;
   void setNumEntities(int);
