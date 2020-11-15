@@ -18,6 +18,9 @@ Entity::Entity(int s, int heal, long sex, int inx, int iny) {
 int Entity::getEntityType() const { return this->entityType; }
 void Entity::setEntityType(int s) { this->entityType = s; }
 
+int Entity::getSpeed() const { return this->speed; }
+void Entity::setSpeed(int s) { this->speed = s; }
+
 int Entity::getHealth() const { return this->health; }
 void Entity::setHealth(int h) { this->health = h; }
 

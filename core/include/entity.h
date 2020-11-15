@@ -35,6 +35,9 @@ class Entity {
   long getSexAppeal() const;
   void setSexAppeal(long);
 
+  int getSpeed() const;
+  void setSpeed(int s);
+
   int getHealth() const;
   void setHealth(int h);
 
