@@ -11,6 +11,7 @@
 #include "happenings.h"
 #include "player.h"
 #include "PerlinNoise.hpp"
+#include "humanoid.h"
 
 using namespace std;
 
