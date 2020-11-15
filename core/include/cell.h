@@ -4,12 +4,11 @@
 using namespace std;
 #ifndef CELL_H
 #define CELL_H
-#include "entity.h"
 #include "biome.h"
 class Cell{
     protected:
-        int cellBiomeID;
-        vector<Entity> ent;
+        Biome cellBiome;
+        int index1 = 0, index2 = 0;
     public:
         Cell();
         Cell(Biome, vector<Entity>)
@@ -17,7 +16,5 @@ class Cell{
         int getBiome() const;
         void setBiome(int biomeID);
 
-        vector<Entity> getEnt() const;
-        void setEnt(vector<Entity>);
 };
 #endif
