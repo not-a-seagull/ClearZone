@@ -24,7 +24,7 @@ class Armor : public Item {
   public:
     Armor();
     Armor(int);
-    
+
     void getBoot();
     void getPant();
     void getShirt();
@@ -34,6 +34,16 @@ class Armor : public Item {
     int getArmorClass() const;
 };
 
+Armor::Armor() {
+  this->bootType = this->pantType = this->shirtType = this->hatType = "none";
+}
+
+Armor::Armor(int bootType, int pantType, int shirtType, int hatType) {
+  this->bootType = (bootType == 0)?"none":((bootType == 1)?"leather":(bootType == 2)?"steel toed boots":"none");
+  this->pantType = (pantType == 0)?"none":((pantType == 1)?"cloth":((pantType == 2)?"leather":(pantType == 3)?"steel":"none"));
+  this->shirtType = (shirtType == 0)?"none":((shirtType == 1)?"cloth":((shirtType == 2)?"leather":(shirtType == 3)?"steel":"none"));
+  this->hatType = (hatType == 0)?"none":((hatType == 1)?"beanie":((hatType == 2)?"duckbill":(hatType == 3)?"helmet":"none"));
+}
 void Armor::getBoot() {
   if (this->bootType == "none") {
     this->speedBoost += 0;
@@ -92,10 +102,32 @@ int Armor::getArmorClass() const { return this->armorClass; }
 
 class Weapon : public Item {
   protected:
-    int damageModifyer;
-    int range; //range of 1 is melee
+    int damageModifyerM, damageR;
+    int arrows, bullets;
+    string bowType, meleeType; //will display bowtype and meleetype as choices in combat
+
   public:
     Weapon();
-    Weapon(int);
+    Weapon(int, int);
+
+    int getArrows() const;
+    int getBullets() const;
 };
 
+Weapon::Weapon() {
+  this->meleeType = "fists";
+  this->bowType = "none";
+}
+
+Weapon::Weapon(int meleeType, int bowType) {
+  this->meleeType = (meleeType == 0)?"fists":((meleeType == 1)?"knife":((meleeType == 2)?"spear":(meleeType == 3)?"katana":"fists"));
+  this->damageModifyerM = meleeType + 1;
+  this->bowType = (bowType == 0)?"none":((bowType == 1)?"longbow":((bowType == 2)?"crossbow":(bowType == 3)?"rifle":"none"));
+  this->damageR = bowType * 15;
+}
+
+int Weapon::getArrows() const { return this->arrows; }
+int Weapon::getBullets() const { return this->bullets; }
+
+string Weapon::getRanged() const { return this->bowType; }
+string Weapon::getMelee() const { return this->meleeType; }
