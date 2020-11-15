@@ -66,8 +66,10 @@ void World::doCombat(Humanoid& player, Entity& enemy) {
     if (player.getSpeed() >= enemy.getSpeed()) {
       
       if (playerTurn) {
+        enemy.setHealth(enemy.getHealth() - (player.getStrength() * playerDamageMultipler));
         playerTurn = false;
       } else if (!playerTurn) {
+        player.setHealth(player.getHealth() - 1);
         playerTurn = true;
       }
     } else if (player.getSpeed() < enemy.getSpeed()) {
@@ -75,7 +77,7 @@ void World::doCombat(Humanoid& player, Entity& enemy) {
         player.setHealth(player.getHealth() - 1);
         playerTurn = true;
       } else if (playerTurn) {
-        enemy.setHealth(enemy.getHealth() - (player.getStrength()));
+        enemy.setHealth(enemy.getHealth() - (player.getStrength() * playerDamageMultipler));
         playerTurn = false;
       }
     }
