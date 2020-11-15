@@ -38,6 +38,7 @@ void yes_button_click(GtkWidget *widget, gpointer user_data);
 void no_button_click(GtkWidget *widget, gpointer user_data);
 void choice_select(GtkWidget *widget, gpointer user_data);
 void process_yesno_res(GInterface *interface, bool yesno);
+void print_inventory(GtkWidget *widget, gpointer user_data);
 
 const int SURFACE_WIDTH = 450;
 const int SURFACE_HEIGHT = 900;
@@ -269,6 +270,8 @@ static void activate(GtkApplication *app, gpointer user_data) {
   GtkWidget *texttainer;
   GtkWidget *textbox;
   GtkWidget *drawbox;
+  GtkWidget *leftbox;
+  GtkWidget *inv_button;
   GtkWidget *container_box;
   GInterface *interface = (GInterface *)user_data;
 
@@ -283,12 +286,19 @@ static void activate(GtkApplication *app, gpointer user_data) {
   container_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_container_add(GTK_CONTAINER(parent), container_box);
 
+  leftbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+  gtk_box_pack_start(GTK_BOX(container_box), leftbox, TRUE, TRUE, 0);
+
   // Create a scrolling box
   texttainer = gtk_scrolled_window_new(NULL, NULL);
   gtk_container_set_border_width(GTK_CONTAINER(texttainer), 10);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(texttainer),
                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-  gtk_box_pack_start(GTK_BOX(container_box), texttainer, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(leftbox), texttainer, TRUE, TRUE, 0);
+
+  inv_button = gtk_button_new_with_label("Print Inventory");
+  gtk_box_pack_start(GTK_BOX(leftbox), inv_button, FALSE, FALSE, 0);
+  g_signal_connect(G_OBJECT(inv_button), "clicked", G_CALLBACK(print_inventory), interface);
 
   // Create the textbox, a box containing text items.
   textbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
@@ -352,4 +362,17 @@ void choice_select(GtkWidget *widget, gpointer user_data) {
   rep(choice);
 
   interface->world_tick();
+}
+
+void print_inventory(GtkWidget *w, gpointer user_data) {
+  GInterface *interface = (GInterface *) user_data;
+  if (!interface->world) return;
+  
+  if (interface->choicebox) {
+    gtk_widget_hide(interface->choicebox);
+  }
+
+  interface->world->printInventory();
+  interface->world_tick();
+
 }
