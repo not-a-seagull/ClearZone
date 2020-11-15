@@ -110,6 +110,9 @@ Weapon::Weapon(int meleeType) {
 
 }
 
+void Weapon::updateDialougue() {
+  this->weaponDialougue = (this->itemID == 1)?"punch enemy" : (this->itemID == 2 || this->itemID == 3 || this->itemID == 4)?"stab enemy":"shoot enemy";
+}
 int Weapon::getArrows() const { return this->arrows; }
 int Weapon::getBullets() const { return this->bullets; }
 
