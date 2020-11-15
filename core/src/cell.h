@@ -1,9 +1,11 @@
 #include <iostream>
 #include <vector>
-#include "entity.h"
+
 using namespace std;
 #ifndef CELL_H
 #define CELL_H
+#include "entity.h"
+#include "biome.h"
 class Cell{
     protected:
         Biome cellBiome;

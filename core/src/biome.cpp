@@ -1,4 +1,5 @@
 #include <iostream>
+#include "biome.h"
 using namespace std;
 
 Biome::Biome() {
