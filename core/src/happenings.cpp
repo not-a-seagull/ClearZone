@@ -22,29 +22,31 @@
 std::function<std::string()> HappenResult::action() {
   return [this]() {
     Player *plr = this->world->get_player(); 
-    std::stringstream ss;
-    ss << this->text << std::endl;
+    std::stringstream res;
+    res << this->text << std::endl;
 
     if (this->items_robbed > 0) {
       for (int i = 0; i < this->items_robbed; i++) {
         int index = std::rand() % plr->inventory.size(); 
-        int id = plr->inventory[index];
-        plr->inventory.erase(plr->begin() + index);
+        int id = plr->inventory[index].getItemID();
+        plr->inventory.erase(plr->inventory.begin() + index);
         res << "Lost " << item_id_to_name(id) << std::endl;
       } 
     }
 
     for (int i = 0; i < this->items.size(); i++) {
-      res << "Found " << item_id_to_name(this->items[i]) << std::endl;
+      res << "Found " << item_id_to_name(this->items[i].getItemID()) << std::endl;
       plr->addItem(this->items[i]);
     }
     if (this->health_gain > 0) {
       res << "Regained " << this->health_gain << " health." << std::endl;
-      plr->addHealth(this->health_gain);
+      plr->setHealth(plr->getHealth() + this->health_gain);
     } else if (this->health_gain < 0) {
       res << "Lost " << -this->health_gain << " health." << std::endl;
-      plr->addHealth(this->heatlh_gain);
+      plr->setHealth(plr->getHealth() + this->health_gain);
     } 
+
+    return res.str();
   };
 }
 
@@ -53,7 +55,7 @@ std::unique_ptr<Event> Happenings::to_event() {
     return std::unique_ptr<Event>(new TextEvent((this->single_result.value().action())()));
   } else {
     Player *plr = this->world->get_player();
-    std::shared_ptr<std::string[]> choices = std::make_shared<std::string[]>(this->results.size()); 
+    std::shared_ptr<std::string[]> choices = std::shared_ptr<std::string[]>(new std::string[this->results.size()]); 
     int cursor = 0;
     std::vector<std::pair<int, int>> cursor_mapping;
     for (int i = 0; i < this->results.size(); i++) {
@@ -61,7 +63,7 @@ std::unique_ptr<Event> Happenings::to_event() {
       auto inv = plr->inventory;
       if (!opp.itemId || std::find(inv.begin(), inv.end(), opp.itemId.value()) != inv.end()) {
         choices[cursor] = opp.text;
-        cursor_mappings.push_back(std::make_pair(cursor, i)); 
+        cursor_mapping.push_back(std::make_pair(cursor, i)); 
         cursor++;
       }
     }

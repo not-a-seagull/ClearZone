@@ -63,7 +63,9 @@ class Happenings {
      Happenings(World *worldc, const std::string& promptc, HappenResult res) : world(worldc), prompt(promptc), single_result(res) {}
      Happenings(World *worldc, const std::string& promptc, std::vector<std::pair<Opportunity, HappenResult>> res) : world(worldc), prompt(promptc), results(res) {}
 
-     std::vector<std::unique_ptr<Event>> to_event();
+     std::unique_ptr<Event> to_event();
 };
+
+std::shared_ptr<std::shared_ptr<Happenings[]>[]> get_happenings(World *world);
 
 #endif
