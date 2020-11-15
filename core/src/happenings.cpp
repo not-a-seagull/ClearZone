@@ -16,6 +16,8 @@
  */
 
 #include "happenings.h"
+#include "player.h"
+#include "world.h"
 
 #include <sstream>
 
@@ -79,4 +81,38 @@ std::unique_ptr<Event> Happenings::to_event() {
       this->world->push_event(std::unique_ptr<Event>(new TextEvent((std::get<1>(this->results[real]).action())())));
     }));
   }
+}
+
+std::shared_ptr<std::shared_ptr<Happenings[]>[]> get_happenings(World *world) {
+  std::shared_ptr<std::shared_ptr<Happenings[]>[]> res = std::shared_ptr<std::shared_ptr<Happenings[]>[]>(new std::shared_ptr<Happenings[]>[5]);
+  res[0] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
+
+  res[0][0] = Happenings(world, "You encounter a lone hut in the woods. Smoke billows from an opening in the top.");
+  HappenResult hr1(world, "The hut has long since been abandoned. You find a knife for your troubles.");
+  HappenResult hr2(world, "You move on.");
+  HappenResult hr3(world, "Your extra caution was unneeded. The hut is abandoned, and you find nothing useful.");
+  Opportunity o1("Enter the hut.");
+  Opportunity o2("Don't take your chances.");
+  Opportunity o3("Walk in brandishing a knife.", 2);
+  res[0][0].results.push_back(std::make_pair(o1, hr1));
+  res[0][0].results.push_back(std::make_pair(o2, hr2));
+  res[0][0].results.push_back(std::make_pair(o3, hr3));
+
+  res[1] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
+
+  res[1][0] = Happenings(world, "The desert sprawls far and wide for as far as the eye can see.", HappenResult(world, "You feel nothing but dehydration."));
+  
+  res[2] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
+
+  res[2][0] = Happenings(world, "The peace inspired by the plains is a serene break from the chaos of life.", HappenResult(world, "You feel releaxed."));
+
+  res[3] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
+
+  res[3][0] = Happenings(world, "The jungle may be hard to naviate, but at least you're safe from predators, for now.", HappenResult(world, "You should get out of here as soon as possible."));
+
+  res[4] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
+
+  res[4][0] = Happenings(world, "The city falls down around you. What could have possible happened here?", HappenResult(world, "You feel nervous."));
+
+  return res;
 }

@@ -8,6 +8,7 @@
 
 #include "cell.h"
 #include "choice.h"
+#include "happenings.h"
 #include "player.h"
 //#include "PerlinNoise.hpp"
 
@@ -21,6 +22,7 @@ class World {
 
   std::queue<std::unique_ptr<Event>> event_queue;
   std::vector<std::unique_ptr<Entity>> entities;
+  std::shared_ptr<std::shared_ptr<Happenings[]>[]> happenings;
 
   void generate_events();
   std::shared_ptr<char[]> compile_map(int &px, int &py);

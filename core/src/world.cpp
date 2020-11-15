@@ -48,6 +48,7 @@ std::shared_ptr<std::string[]> get_directionals() {
 World::World(int width, int height, int octaves, int seed, float scale) { 
 //  siv::PerlinNoise perlin(seed);
   std::srand(time(NULL));
+  this->happenings = get_happenings(this);
   std::unique_ptr<Entity> plr = std::unique_ptr<Entity>(new Player(0, 0, 0, 0, 0));
   plr->indexX = (int)width / 2;
   plr->indexY = (int)width / 2;
@@ -106,6 +107,9 @@ void World::generate_events() {
           case 2: ply->moveEntity(RIGHT); break;
           case 3: ply->moveEntity(DOWN); break;
         } 
+
+        // get an event from the new tile
+        Happenings *hs = this->happenings[this->cells[ply->indexX][ply->indexY].GetBiome()].get();
       }));
   std::unique_ptr<Event> te =
       std::unique_ptr<Event>(new TextEvent("Choose where to go"));
@@ -155,4 +159,8 @@ std::shared_ptr<char[]> World::compile_map(int &playerx, int &playery) {
   }
 
   return res;
+}
+
+void World::push_event(std::unique_ptr<Event> evt) {
+  this->event_queue.push(std::move(evt));
 }
