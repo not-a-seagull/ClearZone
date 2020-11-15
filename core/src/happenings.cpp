@@ -86,7 +86,7 @@ std::unique_ptr<Event> Happenings::to_event() {
 }
 
 std::shared_ptr<std::shared_ptr<Happenings[]>[]> get_happenings(World *world) {
-  std::shared_ptr<std::shared_ptr<Happenings[]>[]> res = std::shared_ptr<std::shared_ptr<Happenings[]>[]>(new std::shared_ptr<Happenings[]>[5]);
+  std::shared_ptr<std::shared_ptr<Happenings[]>[]> res = std::shared_ptr<std::shared_ptr<Happenings[]>[]>(new std::shared_ptr<Happenings[]>[6]);
   res[0] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
 
   res[0][0] = Happenings(world, "You encounter a lone hut in the woods. Smoke billows from an opening in the top.");
@@ -129,5 +129,8 @@ std::shared_ptr<std::shared_ptr<Happenings[]>[]> get_happenings(World *world) {
   res[4][0] = Happenings(world, "The city falls down around you. What could have possible happened here?", HappenResult(world, "You feel nervous."));
   res[4][1] = Happenings(world, "You hear yelling, but can't tell where it comes from.", HappenResult(world, "What does it all mean?"));
 
+  res[5] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
+
+  res[5][0] = Happenings(world, "", )
   return res;
 }
