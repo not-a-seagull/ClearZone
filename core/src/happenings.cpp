@@ -53,6 +53,8 @@ std::function<std::string()> HappenResult::action() {
 }
 
 std::unique_ptr<Event> Happenings::to_event() {
+  this->world->push_event(std::unique_ptr<Event>(new TextEvent(this->prompt)));
+
   if (this->single_result) {
     return std::unique_ptr<Event>(new TextEvent((this->single_result.value().action())()));
   } else {
@@ -97,6 +99,13 @@ std::shared_ptr<std::shared_ptr<Happenings[]>[]> get_happenings(World *world) {
   res[0][0].results.push_back(std::make_pair(o1, hr1));
   res[0][0].results.push_back(std::make_pair(o2, hr2));
   res[0][0].results.push_back(std::make_pair(o3, hr3));
+
+//  res[0][1] = res[0][0];
+
+//  HappenResult hr4(world, "A wolf leaps out and attacks you!", -1);
+//  HappenResult hr4(world, "Your caution is rewarded. You stab a wolf as it leaves the hut.");
+//  res[0][1].results[0] = std::make_pair;
+//  res[0][1]
 
   res[1] = std::shared_ptr<Happenings[]>(new Happenings[HAPPENINGS_PER_BIOME]);
 

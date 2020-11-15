@@ -34,3 +34,5 @@ void Entity::moveEntity(int dir) {
     this->indexX += 1;
   }
 }
+
+int Entity::getSpeed() const { return this->speed; }

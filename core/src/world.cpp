@@ -43,13 +43,18 @@ std::shared_ptr<std::string[]> get_directionals() {
 
   return directionals;
 }
-void doCombat(Humanoid& player, Entity& enemy) {
+void World::doCombat(Humanoid& player, Entity& enemy) {
   bool playerTurn = true;
-  int playerDamageMultiplyer = 1;
-  int playerWeaponChoiceID = 1;
   while (player.getHealth() > 0 && enemy.getHealth() > 0) {
+    std::shared_ptr<std::string[]> weapons = std::shared_ptr<std::string[]>(new std::string[2]);
+    weapons[0] = "Fists";
+    weapons[1] = "Knife";
+
+    this->push_event(std::unique_ptr<Event>(new ChoiceEvent(weapons, 2, [this, player, playerTurn, enemy](ptrdiff_t r) mutable {
+    int playerWeaponChoiceID = r + 1;;
+    int playerDamageMultiplyer = 1;
     //display weapon dialougue this->weaponDialougue to user
-    switch(playerWeapongChoiceID) {
+    switch(playerWeaponChoiceID) {
       case 1: playerDamageMultiplyer = 1;
       case 2: playerDamageMultiplyer = 2;
       case 3: playerDamageMultiplyer = 3;
@@ -58,7 +63,6 @@ void doCombat(Humanoid& player, Entity& enemy) {
       case 6: playerDamageMultiplyer = 3;
       case 7: playerDamageMultiplyer = 5;
     }
-    playerDamageMultiplyer;
     if (player.getSpeed() >= enemy.getSpeed()) {
       
       if (playerTurn) {
@@ -71,10 +75,11 @@ void doCombat(Humanoid& player, Entity& enemy) {
         player.setHealth(player.getHealth() - 1);
         playerTurn = true;
       } else if (playerTurn) {
-        enemy.setHealth(enemy.getHealth() - (player.getStrength))
+        enemy.setHealth(enemy.getHealth() - (player.getStrength()));
         playerTurn = false;
       }
     }
+    })));
   }
 }
 // I'm very tired
@@ -139,6 +144,10 @@ void World::generate_events() {
           case 2: ply->moveEntity(RIGHT); break;
           case 3: ply->moveEntity(DOWN); break;
         } 
+
+        // get an event from the new tile
+        Happenings *hs = this->happenings[this->cells[ply->indexX][ply->indexY].GetBiome()].get();
+        this->push_event(hs[std::rand() % HAPPENINGS_PER_BIOME].to_event());
       }));
   std::unique_ptr<Event> te =
       std::unique_ptr<Event>(new TextEvent("Choose where to go"));
@@ -188,4 +197,8 @@ std::shared_ptr<char[]> World::compile_map(int &playerx, int &playery) {
   }
 
   return res;
+}
+
+void World::push_event(std::unique_ptr<Event> evt) {
+  this->event_queue.push(std::move(evt));
 }
