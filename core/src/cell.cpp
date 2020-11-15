@@ -7,8 +7,7 @@ Cell::Cell() {
     this->cellBiomeID = Biome;
 }
 
-Cell::Cell(Biome b, vector<Entity> e) {
-    this->ent = e;
+Cell::Cell(Biome biome) {
     this->cellBiomeID = b;
 }
 
