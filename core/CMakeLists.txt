@@ -25,6 +25,7 @@ INCLUDE_DIRECTORIES("${CZC_INCLUDE}")
 SET(CZC_SOURCES
   ${CZC_SRC}/cell.cpp
   ${CZC_SRC}/entity.cpp
+  ${CZC_SRC}/happenings.cpp
   ${CZC_SRC}/item.cpp
   ${CZC_SRC}/player.cpp
   ${CZC_SRC}/world.cpp

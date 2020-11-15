@@ -23,12 +23,12 @@ class World {
   std::vector<std::unique_ptr<Entity>> entities;
 
   void generate_events();
-  std::shared_ptr<char[]> compile_map();
+  std::shared_ptr<char[]> compile_map(int &px, int &py);
  public:
   World(int width, int height, int octaves, int seed, float scale);
 
-  void moveEntity(string);
   unique_ptr<Event> next_event();
   Player *get_player();
+  void push_event(std::unique_ptr<Event>);
 };
 #endif

@@ -28,7 +28,6 @@ class Item {
 
     int getItemID(int) const;
 };
-#endif
 
 class Armor : public Item {
   protected:
@@ -148,3 +147,5 @@ string Weapon::getRanged() const {
   return this->bowType; 
 }
 string Weapon::getMelee() const { return this->meleeType; }
+
+#endif
