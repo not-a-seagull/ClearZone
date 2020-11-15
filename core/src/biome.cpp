@@ -2,19 +2,19 @@
 #include "biome.h"
 using namespace std;
 
-BiomeList::AddBiome(char biomeColor) {
+Biome::AddBiome(char biomeColor) {
     biomes.push_back(biomeColor);
 }
 
-BiomeList::GetBiome(int biomeID) {
+Biome::GetBiome(int biomeID) {
     return biomes(i);
 }
 
-BiomeList::SetBiome(int biomeID, char biomeColor) {
+Biome::SetBiome(int biomeID, char biomeColor) {
     biomes[biomeID] = biomeColor;
 }
 
-BiomeList::GetLength(int biomeID) {
+Biome::GetLength(int biomeID) {
     return biomes.size();
 }
 

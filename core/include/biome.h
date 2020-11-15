@@ -21,7 +21,7 @@ using namespace std;
 //         void setID(int);
 // };
 
-class BiomeList {
+class Biome {
     protected:
         std::vector(char) biomes = {'%', '\'', '\"', '{'};
 

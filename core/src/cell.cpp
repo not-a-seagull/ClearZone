@@ -11,8 +11,5 @@ Cell::Cell(Biome biome) {
     this->cellBiomeID = b;
 }
 
-int Cell::getBiome() const { return this->cellBiomeID; }
-void Cell::setBiome(const int b) { this->cellBiomeID = b; }
-
-vector<Entity> Cell::getEnt() const { return this->ent; }
-void Cell::setEnt(vector<Entity> e) { this->ent = e; }
+int Cell::getIndexX() const { return this->index1; }
+int Cell::getIndexY() const { return this->index2; } 
