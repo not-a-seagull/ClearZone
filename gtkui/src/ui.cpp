@@ -83,6 +83,7 @@ void scrl(GtkWidget *tbox) {
   GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(tbox));
   double lower = gtk_adjustment_get_upper(adj);
   gtk_adjustment_set_value(adj, lower);
+//  gtk_widget_set_size_request(tbox, 300, 950);
 }
 
 void GInterface::dpy_text(const char *line) {
@@ -137,7 +138,7 @@ void GInterface::dpy_choice(std::shared_ptr<std::string[]> choices,
   }
   this->num_choices = num_choices;
 
-  gtk_box_pack_start(GTK_BOX(this->textbox), choicebox, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(this->textbox), choicebox, TRUE, FALSE, 0);
   gtk_widget_show_all(choicebox);
   this->choicebox = choicebox;
   scrl(this->scrollbox);

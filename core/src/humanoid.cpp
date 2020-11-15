@@ -39,8 +39,6 @@ void Humanoid::setConstitution(int c) { this->constitution = c; }
 long Humanoid::getSexAppeal() const { return this->sexAppeal; }
 void Humanoid::setSexAppeal(long s) { this->sexAppeal = s; }
 
-int Humanoid::getNumEntities() const { return this->numEntities; }
-void Humanoid::setNumEntities(int num) { this->numEntities = num; }
 
 int Humanoid::getStrength() const { return this->strength; }
 void Humanoid::setStrength(int s) { this->strength = s; }

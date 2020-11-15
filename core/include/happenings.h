@@ -38,10 +38,10 @@ class HappenResult {
     int health_gain; 
     std::optional<int> items_robbed;
 
-    HappenResult(World *worldc, const std::string& textc) : world(worldc), text(textc) {}
-    HappenResult(World *worldc, const std::string& textc, std::vector<Item> itemsc, int health_gainc) : world(worldc), text(textc), items(itemsc), health_gain(health_gainc) {}
+    HappenResult(World *worldc, const std::string& textc) : world(worldc), text(textc), health_gain(0) {}
+    HappenResult(World *worldc, const std::string& textc, int health_gainc) : world(worldc), text(textc), health_gain(health_gainc) {}
 
-    HappenResult(World *worldc, const std::string& textc, std::vector<Item> itemsc, int health_gainc, int items_robbedc) : world(worldc), text(textc), items(itemsc), health_gain(health_gainc), items_robbed(items_robbedc) {}
+    HappenResult(World *worldc, const std::string& textc, int health_gainc, int items_robbedc) : world(worldc), text(textc), health_gain(health_gainc), items_robbed(items_robbedc) {}
 
     std::function<std::string()> action();
 };

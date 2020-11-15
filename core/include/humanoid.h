@@ -28,13 +28,16 @@ class Humanoid : public Entity {
   int getConstitution() const;
   void setConstitution(int);
 
-  double getStrength() const;
-  void setStrength(double);
+  int getStrength() const;
+  void setStrength(int);
 
   int getHunger() const;
   void setHunger(int);
   
   int getDamage() const;
   void updateDamage();
+
+  long getSexAppeal() const;
+  void setSexAppeal(long);
 };
 #endif
