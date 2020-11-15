@@ -3,10 +3,27 @@ using namespace std;
 #ifndef ITEM_H
 #define ITEM_H
 
+//0 - none
+//1 - fists
+//2 - knife
+//3 - spear
+//4 - katana
+//5 - longbow
+//6 - crossbow
+//7 - rifle
+//8 - leather shoes
+//9 - steel toed shoes
+//10 - pants
+//11 - leather pants
+//12 - steel pants
+//13 - shirt
+//14 - leather tunic
+//15 - steel breastplate
+//16 - helmet
 class Item {
   protected:
-    int itemID;
-    int weight;
+    int[10] itemIDs;
+    //int weight;
   public:
     Item();
     Item(int);
@@ -105,7 +122,6 @@ class Weapon : public Item {
     int damageModifyerM, damageR;
     int arrows, bullets;
     string bowType, meleeType; //will display bowtype and meleetype as choices in combat
-
   public:
     Weapon();
     Weapon(int, int);
@@ -120,9 +136,9 @@ Weapon::Weapon() {
 }
 
 Weapon::Weapon(int meleeType, int bowType) {
-  this->meleeType = (meleeType == 0)?"fists":((meleeType == 1)?"knife":((meleeType == 2)?"spear":(meleeType == 3)?"katana":"fists"));
+  this->meleeType = meleeType;
   this->damageModifyerM = meleeType + 1;
-  this->bowType = (bowType == 0)?"none":((bowType == 1)?"longbow":((bowType == 2)?"crossbow":(bowType == 3)?"rifle":"none"));
+  this->bowType = bowType;
   this->damageR = bowType * 15;
 }
 
