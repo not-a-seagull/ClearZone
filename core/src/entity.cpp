@@ -25,13 +25,14 @@ void Entity::setHealth(int h) { this->health = h; }
 
 void Entity::addItem(const Item& item) { this->inventory.push_back(item); }
 
-void Entity::moveEntity(string dir) {
-  this->indexX;
-  this->indexY;
-  if (dir == "UP") {
-    this->
-  } else if (dir == "DOWN") {
-  } else if (dir == "LEFT") {
-  } else if (dir == "RIGHT") {
+void Entity::moveEntity(Direction dir) {
+  if (dir == Up) {
+    this->indexY -= 1;
+  } else if (dir == Down) {
+    this->indexY += 1;
+  } else if (dir == Left) {
+    this->indexX -= 1;
+  } else if (dir == Right) {
+    this->indexX += 1;
   }
 }

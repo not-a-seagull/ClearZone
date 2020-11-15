@@ -12,6 +12,6 @@ class Item {
   Item(int);
 
   int getItemID() const;
-  void setItemID(string);
+  void setItemID(int);
 };
 #endif
