@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-void initialize_world(GInterface *ginterface);
+void initialize_world(GInterface *ginterface, int width, int height, int octaves, int seed, float scale);
 void world_tick(GInterface *interface);
 
 #if __cplusplus

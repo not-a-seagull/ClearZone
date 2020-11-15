@@ -42,6 +42,10 @@ void process_yesno_res(GInterface *interface, bool yesno);
 const int SURFACE_WIDTH = 450;
 const int SURFACE_HEIGHT = 900;
 
+const int MAP_WIDTH = 200, MAP_HEIGHT = 200, OCTAVES = 5; 
+const float MAP_SCALE = 3.23f;
+const int SEED = 353865;
+
 //! Initialize the GInterface.
 GInterface::GInterface(int argc, char **argv) {
   GtkApplication *application;
@@ -190,14 +194,14 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img, int px, int py) {
   gtk_widget_queue_draw(this->drawbox);
 }
 
-void GInterface::initialize_world() {
+void GInterface::initialize_world(int width, int height, int octaves, int seed, float scale) {
   std::shared_ptr<std::string[]> init_choices = std::shared_ptr<std::string[]>(new std::string[2]);
   init_choices[0] = "Create New World";
   init_choices[1] = "Load from File"; 
 
   this->dpy_choice(init_choices, 2, [this](ptrdiff_t load) {
     if (load == 0) {
-      this->world = std::unique_ptr<World>(new World(250, 250));
+      this->world = std::unique_ptr<World>(new World(width, height, octaves, seed, scale));
     } else {
       panic("Unable to load world from file yet");
     }
@@ -273,7 +277,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
   gtk_widget_show_all(parent);
   interface->dpy_text("Welcome to ClearZone!\n");
 
-  interface->initialize_world();
+  interface->initialize_world(MAP_WIDTH, MAP_HEIGHT, OCTAVES, seed, MAP_SCALE));
 }
 
 void drawing_area_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data) {

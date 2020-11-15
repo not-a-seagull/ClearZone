@@ -40,11 +40,12 @@ std::shared_ptr<std::string[]> get_directionals() {
 }
 
 // I'm very tired
-World::World(int width, int height) { 
-  std::srand(time(NULL));
+World::World(int width, int height, int octaves, int seed, float scale) { 
+  siv::PerlinNoise perlin(seed);
+  std::srand(std::time(NULL));
   std::unique_ptr<Entity> plr = std::unique_ptr<Entity>(new Player(0, 0, 0, 0, 0));
-  plr->indexX = 100;
-  plr->indexY = 100;
+  plr->indexX = (int)width / 2;
+  plr->indexY = (int)width / 2;
   this->width = width;
   this->height = height;
   this->entities.push_back(std::move(plr));
@@ -52,9 +53,27 @@ World::World(int width, int height) {
   for (int i = 0; i < width; i++) {
     this->cells[i] = std::move(std::make_unique<Cell[]>(height));
     for (int j = 0; j < height; j++) {
-      this->cells[i][j] = Cell(std::rand() % 2);
+      float val = perlin.accumulatedOctaveNoise2D_0_1(i / scale, j / scale, octaves); 
+      this->cells[i][j] = Cell((int) val * BIOME_COUNT));
     }
   }
+
+  // This loop iterates over the map and determines river tiles.
+  for (int i = 0; i < width; i++) {
+    this->cells[i] = std::move(std::make_unique<Cell[]>(height));
+    for (int j = 0; j < height; j++) {
+      float riverProbability = 0.1f; // Probability that a river / stream tile will on this cell;
+      for(int x = -1; x < 1; x++) {
+        for(int y = -1; y < 1; y++) {
+          if(this->cells[i + x][j + y].GetBiome() == 1) {
+              riverProbability += 0.33f;
+          }
+        }
+      }
+      this->cells[i][j] = ((float)std::rand() / RAND_MAX) < riverProbability ? 1 : 0; 
+    }
+  }
+
 }
 
 std::unique_ptr<Event> World::next_event() {

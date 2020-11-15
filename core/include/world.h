@@ -9,6 +9,7 @@
 #include "cell.h"
 #include "choice.h"
 #include "player.h"
+#include "PerlinNoise.hpp"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ class World {
   void generate_events();
   std::shared_ptr<char[]> compile_map();
  public:
-  World(int width, int height);
+  World(int width, int height, int octaves, int seed, float scale);
 
   void moveEntity(string);
   unique_ptr<Event> next_event();

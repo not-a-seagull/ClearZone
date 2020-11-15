@@ -82,7 +82,7 @@ class GInterface {
 
   int run();
   void stop();
-  void initialize_world();
+  void initialize_world(int width, int height, int octaves, int seed, float scale);
   void world_tick();
 
   //! Display some text on the GInterface.
