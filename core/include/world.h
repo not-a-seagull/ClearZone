@@ -5,6 +5,7 @@
 #include <memory>
 #include <queue>
 
+#include "biome.h"
 #include "cell.h"
 #include "choice.h"
 

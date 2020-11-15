@@ -25,7 +25,7 @@ std::shared_ptr<std::string[]> get_directionals() {
 }
 
 // I'm very tired
-void World::newWorld() {
+World::World() {
   for (int i = 0; i < 16; i++) {
     for (int j = 0; j < 16; j++) {
       //            Cells[i][j] = Cell;
@@ -48,6 +48,7 @@ void World::generate_events() {
   memset(tiles.get(), 'B', 32 * 32);
 
   std::unique_ptr<Event> mde = std::unique_ptr<Event>(new MapDpyEvent(tiles));
+  std::unique_ptr<Event> te = std::unique_ptr<Event>(new TextEvent("Choose where to go"));
 
   std::unique_ptr<Event> ce = std::unique_ptr<Event>(
       new ChoiceEvent(get_directionals(), 5, [](ptrdiff_t choice) {
@@ -55,5 +56,6 @@ void World::generate_events() {
       }));
 
   this->event_queue.push(std::move(mde));
+  this->event_queue.push(std::move(te));
   this->event_queue.push(std::move(ce));
 }
