@@ -42,3 +42,6 @@ void Humanoid::setSexAppeal(long s) { this->sexAppeal = s; }
 
 int Humanoid::getStrength() const { return this->strength; }
 void Humanoid::setStrength(int s) { this->strength = s; }
+
+int Humanoid::getDamage() const { return this->damage; }
+void Humanoid::updateDamage(int damage) { this->damage = damage; }

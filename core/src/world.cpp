@@ -68,7 +68,7 @@ void World::doCombat(Humanoid& player, Entity& enemy) {
     if (player.getSpeed() >= enemy.getSpeed()) {
       
       if (playerTurn) {
-        enemy.setHealth(enemy.getHealth() - (player.getStrength() * playerDamageMultipler));
+        enemy.setHealth(enemy.getHealth() - (player.getStrength() * playerDamageMultiplyer));
         playerTurn = false;
       } else if (!playerTurn) {
         player.setHealth(player.getHealth() - 1);
@@ -79,7 +79,7 @@ void World::doCombat(Humanoid& player, Entity& enemy) {
         player.setHealth(player.getHealth() - 1);
         playerTurn = true;
       } else if (playerTurn) {
-        enemy.setHealth(enemy.getHealth() - (player.getStrength() * playerDamageMultipler));
+        enemy.setHealth(enemy.getHealth() - (player.getStrength() * playerDamageMultiplyer));
         playerTurn = false;
       }
     }
@@ -88,9 +88,10 @@ void World::doCombat(Humanoid& player, Entity& enemy) {
 }
 // I'm very tired
 World::World(int width, int height, int octaves, int seed, float scale) { 
+  Noise2D noise;
+  noise.numOctaves = octaves;
 //  siv::PerlinNoise perlin(seed);
   std::srand(time(NULL));
-  const siv::PerlinNoise perlin(seed);
   std::unique_ptr<Entity> plr = std::unique_ptr<Entity>(new Player(0, 0, 0, 0, 0));
   plr->indexX = (int)width / 2;
   plr->indexY = (int)width / 2;
@@ -101,7 +102,8 @@ World::World(int width, int height, int octaves, int seed, float scale) {
   for (int i = 0; i < width; i++) {
     this->cells[i] = std::move(std::make_unique<Cell[]>(height));
     for (int j = 0; j < height; j++) {
-      float val = (float)ValueNoise2D_2D((double) i / scale,(double) j / scale);
+      float val = (float)noise.ValueNoise_2D((double) i / scale,(double) j / scale) / std::numeric_limits<float>::max();
+      std::cout << val;
       //float val = (float)std::rand() / (float)RAND_MAX;
       this->cells[i][j] = Cell((int) (val * BIOME_COUNT));
     }
@@ -113,7 +115,7 @@ World::World(int width, int height, int octaves, int seed, float scale) {
   for (int i = 0; i < width; i++) {
     this->cells[i] = std::move(std::make_unique<Cell[]>(height));
     for (int j = 0; j < height; j++) {
-      float riverProbability = 0.1f; // Probability that a river / stream tile will on this cell;
+      float riverProbability = 0.05f; // Probability that a river / stream tile will on this cell;
       for(int x = -1; x < 1; x++) {
         for(int y = -1; y < 1; y++) {
           if(this->cells[max(i + x, 0)][max(j + y, 0)].GetBiome() == 5) {

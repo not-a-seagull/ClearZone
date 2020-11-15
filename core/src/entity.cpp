@@ -21,6 +21,9 @@ void Entity::setEntityType(int s) { this->entityType = s; }
 int Entity::getHealth() const { return this->health; }
 void Entity::setHealth(int h) { this->health = h; }
 
+int Entity::getSpeed() const { return this->speed; } 
+void Entity::setSpeed(int i) { this->speed = i; }
+
 void Entity::addItem(const Item& item) { this->inventory.push_back(item); }
 
 void Entity::moveEntity(int dir) {
@@ -34,5 +37,3 @@ void Entity::moveEntity(int dir) {
     this->indexX += 1;
   }
 }
-
-int Entity::getSpeed() const { return this->speed; }

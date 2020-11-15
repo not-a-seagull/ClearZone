@@ -12,7 +12,7 @@
 #include "player.h"
 #include "PerlinNoise.hpp"
 #include "humanoid.h"
-
+#include "entity.h"
 using namespace std;
 
 class World {
@@ -20,7 +20,7 @@ class World {
   unique_ptr<unique_ptr<Cell[]>[]> cells;
   int width;
   int height;
-
+  bool isFighting = false;
   std::queue<std::unique_ptr<Event>> event_queue;
   std::vector<std::unique_ptr<Entity>> entities;
   std::shared_ptr<std::shared_ptr<Happenings[]>[]> happenings;

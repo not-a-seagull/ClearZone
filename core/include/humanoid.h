@@ -35,7 +35,7 @@ class Humanoid : public Entity {
   void setHunger(int);
   
   int getDamage() const;
-  void updateDamage();
+  void updateDamage(int damage);
 
   long getSexAppeal() const;
   void setSexAppeal(long);
