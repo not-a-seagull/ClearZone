@@ -1,4 +1,19 @@
-
+/* core/src/world.cpp
+ *
+ * Clear Zone is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Clear Zone is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Clear Zone.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
 
 #include "world.h"
 
@@ -48,12 +63,12 @@ void World::generate_events() {
   memset(tiles.get(), 'B', 32 * 32);
 
   std::unique_ptr<Event> mde = std::unique_ptr<Event>(new MapDpyEvent(tiles));
-  std::unique_ptr<Event> te = std::unique_ptr<Event>(new TextEvent("Choose where to go"));
-
   std::unique_ptr<Event> ce = std::unique_ptr<Event>(
       new ChoiceEvent(get_directionals(), 5, [](ptrdiff_t choice) {
         // TODO
       }));
+  std::unique_ptr<Event> te =
+      std::unique_ptr<Event>(new TextEvent("Choose where to go"));
 
   this->event_queue.push(std::move(mde));
   this->event_queue.push(std::move(te));

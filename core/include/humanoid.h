@@ -6,9 +6,11 @@ using namespace std;
 class Humanoid : public Entity {
  protected:
   int constitution, intelligence, wisdom, charisma, dexterity, strength;
+  double hunger;
 
  public:
   Humanoid();
+  Humanoid(int, int, long, int, int, int,int, int, int, int, int);
 
   int getDexterity() const;
   void setDexterity(int);
@@ -27,5 +29,8 @@ class Humanoid : public Entity {
 
   double getStrength() const;
   void setStrength(double);
+
+  int getHunger() const;
+  void setHunger(int);
 };
 #endif
