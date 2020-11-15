@@ -15,5 +15,7 @@ class Caravan : public Entity{
         void trade();
         void rob();
         void getRobbed();
+
+        vector<Item>& getInventory() const;
 };
 #endif

@@ -20,6 +20,7 @@ class Entity {
         long sexAppeal;
         int indexX, indexY;
     public:
+
         Entity();
         Entity(int, int, long, int, int);
 
