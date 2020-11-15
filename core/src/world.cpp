@@ -25,9 +25,9 @@
 #include "choice.h"
 
 static char BIOME_TABLE[] = {
-   'F', 'D', 'P', 'J', 'A',
+   'F', 'D', 'P', 'J', 'A', 'W'
 };
-static int BIOME_COUNT = 5;
+static int BIOME_COUNT = 6;
 
 static std::shared_ptr<std::string[]> directionals;
 
@@ -64,21 +64,24 @@ World::World(int width, int height, int octaves, int seed, float scale) {
     }
   }
 
+  std::cout << "dfjslk" << std::endl;
+
   // This loop iterates over the map and determines river tiles.
-  for (int i = 0; i < width; i++) {
-    this->cells[i] = std::move(std::make_unique<Cell[]>(height));
-    for (int j = 0; j < height; j++) {
-      float riverProbability = 0.1f; // Probability that a river / stream tile will on this cell;
-      for(int x = -1; x < 1; x++) {
-        for(int y = -1; y < 1; y++) {
-          if(this->cells[i + x][j + y].GetBiome() == 1) {
-              riverProbability += 0.33f;
-          }
-        }
-      }
-      this->cells[i][j] = ((float)std::rand() / (float)RAND_MAX) < riverProbability ? 1 : 0; 
-    }
-  }
+//  for (int i = 0; i < width; i++) {
+//     for (int j = 0; j < height; j++) {
+//       float riverProbability = 0.1f; // Probability that a river / stream tile will on this cell;
+//       for(int x = -1; x < 1; x++) {
+//         for(int y = -1; y < 1; y++) {
+//           if(this->cells[max(i + x, 0)][max(j + y, 0)].GetBiome() == 5) {
+//               riverProbability += 0.45f;
+//           }
+//         }
+//       }
+//       if((float)std::rand() / RAND_MAX < riverProbability) {
+//         this->cells[i][j] = Cell(5);
+//       }
+//     }
+//   }
 
 }
 
