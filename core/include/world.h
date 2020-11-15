@@ -9,5 +9,6 @@ class World {
         unique_ptr<unique_ptr<Cell[]>[]> Cells;
     public:
         void newWorld();
+        void moveEntity(string);
 };
 #endif

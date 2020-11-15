@@ -8,6 +8,7 @@ Entity::Entity() {
     this->strength = 0;
     this->sexAppeal = 0; //(me)
     this->numEntities = 1;
+    
 }
 
 Entity::Entity(string s, int heal, int intel, int charis, int dex, int wisdom, int constit, double str, long sex, int num) {
@@ -53,3 +54,18 @@ void Entity::setStrength(double s) { this->strength = s; }
 void Entity::addItem(const Item& item) {
     this->inventory.push_back(item);
 } 
+
+void Entity::moveEntity(string dir) {
+    this->indexX;
+    this->indexY;
+    if (dir == "UP") {
+        this->
+    } else if (dir == "DOWN") {
+
+    } else if (dir == "LEFT") {
+
+    } else if (dir == "RIGHT") {
+
+    }
+
+}
