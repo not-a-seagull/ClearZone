@@ -104,31 +104,30 @@ World::World(int width, int height, int octaves, int seed, float scale) {
     this->cells[i] = std::move(std::make_unique<Cell[]>(height));
     for (int j = 0; j < height; j++) {
       float val = (float)noise.ValueNoise_2D((double) i / scale,(double) j / scale);
-      //std::cout << val << std::endl;
+      //std::cout << abs((int)(val * 40) % BIOME_COUNT) << std::endl;
       //float val = (float)std::rand() / (float)RAND_MAX;
-      this->cells[i][j] = Cell((int) (val * 4 * BIOME_COUNT));
+      //std::cout << BIOME_TABLE[(uint8_t)(val * 40) % BIOME_COUNT] << std::endl;
+      this->cells[i][j] = Cell((uint8_t)(val * 40) % BIOME_COUNT);
     }
   }
-
-  std::cout << "dfjslk" << std::endl;
 
   // This loop iterates over the map and determines river tiles.
-  for (int i = 0; i < width; i++) {
-    this->cells[i] = std::move(std::make_unique<Cell[]>(height));
-    for (int j = 0; j < height; j++) {
-      float riverProbability = 0.05f; // Probability that a river / stream tile will on this cell;
-      for(int x = -1; x < 1; x++) {
-        for(int y = -1; y < 1; y++) {
-          if(this->cells[max(i + x, 0)][max(j + y, 0)].GetBiome() == 5) {
-              riverProbability += 0.1f;
-          }
-        }
-      }
-      if((float)std::rand() / RAND_MAX < riverProbability) {
-        this->cells[i][j] = Cell(5);
-      }
-    }
-  }
+  // for (int i = 0; i < width; i++) {
+  //   this->cells[i] = std::move(std::make_unique<Cell[]>(height));
+  //   for (int j = 0; j < height; j++) {
+  //     float riverProbability = 0.05f; // Probability that a river / stream tile will on this cell;
+  //     for(int x = -1; x < 1; x++) {
+  //       for(int y = -1; y < 1; y++) {
+  //         if(this->cells[max(i + x, 0)][max(j + y, 0)].GetBiome() == 5) {
+  //             riverProbability += 0.1f;
+  //         }
+  //       }
+  //     }
+  //     if((float)std::rand() / RAND_MAX < riverProbability) {
+  //       this->cells[i][j] = Cell(5);
+  //     }
+  //   }
+  // }
 
 }
 

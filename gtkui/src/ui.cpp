@@ -43,7 +43,7 @@ const int SURFACE_WIDTH = 450;
 const int SURFACE_HEIGHT = 900;
 
 const int MAP_WIDTH = 200, MAP_HEIGHT = 200, OCTAVES = 5; 
-const float MAP_SCALE = 3.23f;
+const float MAP_SCALE = 0.83f;
 const int SEED = 353865;
 
 //! Initialize the GInterface.
