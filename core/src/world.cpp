@@ -24,6 +24,11 @@
 
 #include "choice.h"
 
+static char BIOME_TABLE[] = {
+   'F', 'D', 'P', 'J', 'A',
+};
+static int BIOME_COUNT = 5;
+
 static std::shared_ptr<std::string[]> directionals;
 
 std::shared_ptr<std::string[]> get_directionals() {
@@ -41,8 +46,8 @@ std::shared_ptr<std::string[]> get_directionals() {
 
 // I'm very tired
 World::World(int width, int height, int octaves, int seed, float scale) { 
-  siv::PerlinNoise perlin(seed);
-  std::srand(std::time(NULL));
+//  siv::PerlinNoise perlin(seed);
+  std::srand(time(NULL));
   std::unique_ptr<Entity> plr = std::unique_ptr<Entity>(new Player(0, 0, 0, 0, 0));
   plr->indexX = (int)width / 2;
   plr->indexY = (int)width / 2;
@@ -53,13 +58,14 @@ World::World(int width, int height, int octaves, int seed, float scale) {
   for (int i = 0; i < width; i++) {
     this->cells[i] = std::move(std::make_unique<Cell[]>(height));
     for (int j = 0; j < height; j++) {
-      float val = perlin.accumulatedOctaveNoise2D_0_1(i / scale, j / scale, octaves); 
-      this->cells[i][j] = Cell((int) val * BIOME_COUNT));
+      //float val = perlin.accumulatedOctaveNoise2D_0_1(i / scale, j / scale, octaves); 
+      float val = (float)std::rand() / (float)RAND_MAX;
+      this->cells[i][j] = Cell((int) (val * BIOME_COUNT));
     }
   }
 
   // This loop iterates over the map and determines river tiles.
-  for (int i = 0; i < width; i++) {
+  /*for (int i = 0; i < width; i++) {
     this->cells[i] = std::move(std::make_unique<Cell[]>(height));
     for (int j = 0; j < height; j++) {
       float riverProbability = 0.1f; // Probability that a river / stream tile will on this cell;
@@ -70,9 +76,9 @@ World::World(int width, int height, int octaves, int seed, float scale) {
           }
         }
       }
-      this->cells[i][j] = ((float)std::rand() / RAND_MAX) < riverProbability ? 1 : 0; 
+      this->cells[i][j] = ((float)std::rand() / (float)RAND_MAX) < riverProbability ? 1 : 0; 
     }
-  }
+  }*/
 
 }
 
@@ -120,11 +126,6 @@ Player *World::get_player() {
   }
   return nullptr;
 }
-
-
-static char BIOME_TABLE[] = {
-   'F', 'D',
-};
 
 std::shared_ptr<char[]> World::compile_map() {
   Player *ply = this->get_player();

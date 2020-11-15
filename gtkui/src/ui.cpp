@@ -162,6 +162,21 @@ void GInterface::dpy_map(std::shared_ptr<char[]> img, int px, int py) {
           g = 0.5f;
           b = 0.0f;
           break;
+        case 'P':
+          r = 0.0f;
+          g = 0.9f;
+          b = 0.2f;
+          break;
+        case 'J':
+          r = 0.1f;
+          g = 0.5f;
+          b = 0.0f;
+          break;
+        case 'A':
+          r = 0.5f;
+          g = 0.5f; 
+          b = 0.5f;
+          break;
         default:
           r = 0.0f;
           g = 0.0f;
@@ -199,7 +214,7 @@ void GInterface::initialize_world(int width, int height, int octaves, int seed, 
   init_choices[0] = "Create New World";
   init_choices[1] = "Load from File"; 
 
-  this->dpy_choice(init_choices, 2, [this](ptrdiff_t load) {
+  this->dpy_choice(init_choices, 2, [this, width, height, octaves, seed, scale](ptrdiff_t load) {
     if (load == 0) {
       this->world = std::unique_ptr<World>(new World(width, height, octaves, seed, scale));
     } else {
@@ -277,7 +292,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
   gtk_widget_show_all(parent);
   interface->dpy_text("Welcome to ClearZone!\n");
 
-  interface->initialize_world(MAP_WIDTH, MAP_HEIGHT, OCTAVES, seed, MAP_SCALE));
+  interface->initialize_world(MAP_WIDTH, MAP_HEIGHT, OCTAVES, SEED, MAP_SCALE);
 }
 
 void drawing_area_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data) {
