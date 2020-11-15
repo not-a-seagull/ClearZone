@@ -57,6 +57,7 @@ class Weapon : public Item {
     int damageModifyerM, damageR;
     int arrows, bullets;
     string bowType, meleeType; //will display bowtype and meleetype as choices in combat
+    string weaponDialougue;
   public:
     Weapon();
     Weapon(int);
@@ -65,6 +66,7 @@ class Weapon : public Item {
     string getRanged() const;
     string getMelee() const;
     int getBullets() const;
+    void updateDialougue();
 };
 
 #endif
