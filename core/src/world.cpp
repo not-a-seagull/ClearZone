@@ -43,12 +43,35 @@ std::shared_ptr<std::string[]> get_directionals() {
 
   return directionals;
 }
-
+void doCombat(Entity& player, Entity& enemy) {
+  bool playerTurn = true;
+  int playerDamageMultiplyer = 1;
+  int playerWeaponChoiceID = 1;
+  while (player.getHealth() > 0 && enemy.getHealth() > 0) {
+    //display weapon dialougue this->weaponDialougue to user
+    
+    playerDamageMultiplyer;
+    if (player.getSpeed() >= enemy.getSpeed()) {
+      
+      if (playerTurn) {
+        playerTurn = false;
+      } else if (!playerTurn) {
+        playerTurn = true;
+      }
+    } else if (player.getSpeed() < enemy.getSpeed()) {
+      if (!playerTurn) {
+        player.setHealth(player.getHealth() - enemy.getDamage());
+        playerTurn = true;
+      } else if (playerTurn) {
+        playerTurn = false;
+      }
+    }
+  }
+}
 // I'm very tired
 World::World(int width, int height, int octaves, int seed, float scale) { 
 //  siv::PerlinNoise perlin(seed);
   std::srand(time(NULL));
-  this->happenings = get_happenings(this);
   std::unique_ptr<Entity> plr = std::unique_ptr<Entity>(new Player(0, 0, 0, 0, 0));
   plr->indexX = (int)width / 2;
   plr->indexY = (int)width / 2;
@@ -66,7 +89,7 @@ World::World(int width, int height, int octaves, int seed, float scale) {
   }
 
   // This loop iterates over the map and determines river tiles.
-  for (int i = 0; i < width; i++) {
+  /*for (int i = 0; i < width; i++) {
     this->cells[i] = std::move(std::make_unique<Cell[]>(height));
     for (int j = 0; j < height; j++) {
       float riverProbability = 0.1f; // Probability that a river / stream tile will on this cell;
@@ -79,7 +102,7 @@ World::World(int width, int height, int octaves, int seed, float scale) {
       }
       this->cells[i][j] = ((float)std::rand() / (float)RAND_MAX) < riverProbability ? 1 : 0; 
     }
-  }
+  }*/
 
 }
 
@@ -107,9 +130,6 @@ void World::generate_events() {
           case 2: ply->moveEntity(RIGHT); break;
           case 3: ply->moveEntity(DOWN); break;
         } 
-
-        // get an event from the new tile
-        Happenings *hs = this->happenings[this->cells[ply->indexX][ply->indexY].GetBiome()].get();
       }));
   std::unique_ptr<Event> te =
       std::unique_ptr<Event>(new TextEvent("Choose where to go"));
@@ -159,8 +179,4 @@ std::shared_ptr<char[]> World::compile_map(int &playerx, int &playery) {
   }
 
   return res;
-}
-
-void World::push_event(std::unique_ptr<Event> evt) {
-  this->event_queue.push(std::move(evt));
 }

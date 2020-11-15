@@ -7,6 +7,7 @@ class Humanoid : public Entity {
  protected:
   int constitution, intelligence, wisdom, charisma, dexterity, strength;
   double hunger;
+  int damage;
 
  public:
   Humanoid();
@@ -32,5 +33,8 @@ class Humanoid : public Entity {
 
   int getHunger() const;
   void setHunger(int);
+  
+  int getDamage() const;
+  void updateDamage();
 };
 #endif
