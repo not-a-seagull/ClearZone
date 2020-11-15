@@ -23,8 +23,8 @@
 #include <string.h>
 
 void panic(const char *msg) {
-  fprintf(stderr, "A fatal error has occured and ClearZone must shut down: %s\n",
-          msg);
+  fprintf(stderr,
+          "A fatal error has occured and ClearZone must shut down: %s\n", msg);
   fprintf(stderr, "System Error: %s\n", strerror(errno));
   exit(1);
 }

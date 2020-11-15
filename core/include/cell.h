@@ -5,16 +5,17 @@ using namespace std;
 #ifndef CELL_H
 #define CELL_H
 #include "biome.h"
-class Cell{
-    protected:
-        Biome cellBiome;
-        int index1 = 0, index2 = 0;
-    public:
-        Cell();
-        Cell(Biome, vector<Entity>)
 
-        int getBiome() const;
-        void setBiome(int biomeID);
+class Cell {
+ protected:
+  Biome cellBiome;
+  int index1 = 0, index2 = 0;
 
+ public:
+  Cell();
+  Cell(Biome, vector<Entity>)
+
+      int getBiome() const;
+  void setBiome(int biomeID);
 };
 #endif

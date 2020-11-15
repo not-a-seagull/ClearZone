@@ -1,23 +1,27 @@
-#include <iostream>
 #include "humanoid.h"
+
+#include <iostream>
 using namespace std;
 
 Humanoid::Humanoid() : Entity() {
-    this->strength = 10;
-    this->dexterity = 10;
-    this->constitution = 10;
-    this->intelligence = 10;
-    this->wisdom = 10;
-    this->charisma = 10;
+  this->strength = 10;
+  this->dexterity = 10;
+  this->constitution = 10;
+  this->intelligence = 10;
+  this->wisdom = 10;
+  this->charisma = 10;
 }
 
-Humanoid::Humanoid(int s, int heal, long sex, int inx, int iny, int strength, int dex, int constitution, int intelligence, int wisdom, int charisma) : Entity(s, heal, sex, inx, iny) {
-    this->strength = strength;
-    this->dexterity = dex;
-    this->constitution = constitution;
-    this->intelligence = intelligence;
-    this->wisdom = wisdom;
-    this->charisma = charisma;
+Humanoid::Humanoid(int s, int heal, long sex, int inx, int iny, int strength,
+                   int dex, int constitution, int intelligence, int wisdom,
+                   int charisma)
+    : Entity(s, heal, sex, inx, iny) {
+  this->strength = strength;
+  this->dexterity = dex;
+  this->constitution = constitution;
+  this->intelligence = intelligence;
+  this->wisdom = wisdom;
+  this->charisma = charisma;
 }
 
 int Humanoid::getIntelligence() const { return this->intelligence; }

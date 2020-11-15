@@ -4,27 +4,28 @@ using namespace std;
 #define HUMANOID_H
 #include "entity.h"
 class Humanoid : public Entity {
-    protected: 
-        int constitution, intelligence, wisdom, charisma, dexterity, strength;
-    public:
-        Humanoid();
-        
-        int getDexterity() const;
-        void setDexterity(int);
+ protected:
+  int constitution, intelligence, wisdom, charisma, dexterity, strength;
 
-        int getCharisma() const;
-        void setCharisma(int);
+ public:
+  Humanoid();
 
-        int getWisdom() const;
-        void setWisdom(int);
+  int getDexterity() const;
+  void setDexterity(int);
 
-        int getIntelligence() const;
-        void setIntelligence(int);
+  int getCharisma() const;
+  void setCharisma(int);
 
-        int getConstitution() const;
-        void setConstitution(int);  
+  int getWisdom() const;
+  void setWisdom(int);
 
-        double getStrength() const;
-        void setStrength(double);
+  int getIntelligence() const;
+  void setIntelligence(int);
+
+  int getConstitution() const;
+  void setConstitution(int);
+
+  double getStrength() const;
+  void setStrength(double);
 };
 #endif

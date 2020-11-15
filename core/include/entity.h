@@ -7,29 +7,29 @@ using namespace std;
 #define ENTITY_H
 
 class Entity {
-    protected:
-        int entityType;
-        
-        int health;
-        long sexAppeal;
-        
-        vector<Item> inventory;
-    public:
-        Entity();
-        Entity(int, int, long, int, int);
+ protected:
+  int entityType;
 
-        int getEntityType() const;
-        void setEntityType(int);
+  int health;
+  long sexAppeal;
 
-        int getNumEntities() const;
-        void setNumEntities(int);
+  vector<Item> inventory;
 
-        int getHealth() const;
-        void setHealth(int);
+ public:
+  Entity();
+  Entity(int, int, long, int, int);
 
-        long getSexAppeal() const;
-        void setSexAppeal(long);
+  int getEntityType() const;
+  void setEntityType(int);
+  string getEntityType() const;
+  void setEntityType(string);
 
-        void addItem(Item);
+  int getNumEntities() const;
+  void setNumEntities(int);
+
+  long getSexAppeal() const;
+  void setSexAppeal(long);
+
+  void addItem(Item);
 };
 #endif
